@@ -1,0 +1,2 @@
+[app]
+shm_key = ["shm_0", "shm_1","shm_2", "shm_3", "shm_4", "shm_5"]
