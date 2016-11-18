@@ -32,7 +32,6 @@ DooR-API-Server
 
 # igonore for cmake
 CMakeCache.txt
-CMakeLists.txt
 MakeFile
 cmake_install.cmake
 CMakeFiles/
