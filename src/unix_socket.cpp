@@ -1,15 +1,15 @@
-#include "unix_server.h"
+#include "unix_socket.h"
 
-const char* UnixServer::socket_name_ = "/tmp/unix-socket";
+const char* UnixSocket::socket_name_ = "/tmp/unix-socket";
 
-UnixServer::UnixServer() {
+UnixSocket::UnixSocket() {
     //register_handler();
     unlink(socket_name_);
     ack_ = 1;
     container_num_ = 0;
 }
 
-UnixServer::~UnixServer() {
+UnixSocket::~UnixSocket() {
 }
 
 /*
@@ -23,16 +23,14 @@ register_handler() {
 }
 */
 
-
 void
-UnixServer::run() {
+UnixSocket::run() {
     create();
     serve();
 }
 
-
 void
-UnixServer::create() {
+UnixSocket::create() {
     struct sockaddr_un server_addr;
     int soval = 1;
 
@@ -67,7 +65,7 @@ UnixServer::create() {
 }
 
 void
-UnixServer::serve() {
+UnixSocket::serve() {
     int client;
     struct sockaddr_in client_addr;
     socklen_t clientlen = sizeof(client_addr);
@@ -80,18 +78,19 @@ UnixServer::serve() {
 }
 
 void
-UnixServer::handle(int client) {
+UnixSocket::handle(int client) {
     bool success;
     if (get_ack(client)) {
         success = send_response(client);
-        // TODO; bug-increments 4 times
-        if (success) container_num_++;
+        // TODO; fix bug-increments 4 times
+        if (success) {
+            container_num_++;
+        }
     }
 }
 
-
 bool
-UnixServer::get_ack(int client) {
+UnixSocket::get_ack(int client) {
     recv(client, &ack_, sizeof(&ack_), 0);
     printf("return ack_ =%d", ack_);
 
@@ -102,7 +101,7 @@ UnixServer::get_ack(int client) {
 }
 
 bool
-UnixServer::send_response(int client) {
+UnixSocket::send_response(int client) {
     int cc;
 
     if ((cc = send(client, &container_num_, sizeof(int), 0)) < 0) {
@@ -114,12 +113,12 @@ UnixServer::send_response(int client) {
 }
 
 void
-UnixServer::close_socket() {
+UnixSocket::close_socket() {
     unlink(socket_name_);
 }
 
 void
-UnixServer::interrupt(int) {
+UnixSocket::interrupt(int) {
     unlink(socket_name_);
 }
 

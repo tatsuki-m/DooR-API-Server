@@ -12,11 +12,11 @@
 #include <unistd.h>
 #include <string>
 
-class UnixServer {
+class UnixSocket {
 
 public:
-    UnixServer();
-    ~UnixServer();
+    UnixSocket();
+    ~UnixSocket();
     void run();
 
 private:
