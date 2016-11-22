@@ -84,8 +84,8 @@ UnixSocket::handle(int client) {
     if (getAck(client)) {
         success = sendResponse(client);
         if (success) {
-            containerNum_++;
             notifyServer();
+            containerNum_++;
         }
     }
 }
