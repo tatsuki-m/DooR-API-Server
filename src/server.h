@@ -1,6 +1,7 @@
 #ifndef INCLUDED_SERVER
 #define INCLUDED_SERVER
 
+#include <stdio.h>
 #include "i_observer.h"
 
 class Server : public IObserver

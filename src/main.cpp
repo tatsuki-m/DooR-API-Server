@@ -18,9 +18,10 @@ main() {
     UnixSocket socket = UnixSocket();
     Server server = Server();
 
-
+    socket.subscribe(&server);
 
     // start server
+    socket.run();
 
 
     return 0;
