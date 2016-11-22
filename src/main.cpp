@@ -1,8 +1,8 @@
 #include <string>
 #include <iostream>
-#include "cpptoml.h"
 
-using namespace std;
+#include "unix_socket.h"
+#include "cpptoml.h"
 
 int
 main() {
@@ -13,13 +13,12 @@ main() {
     // {
     //    cout << val << endl;
     // };
-    
-    // open socket
-    UnixServer server = UnixServer();
-    server.run();
+
+    // initialize socket & server instance
+    UnixSocket socket = UnixSocket();
+    // Server server = Server();
 
     // start server
-
 
 
     return 0;
