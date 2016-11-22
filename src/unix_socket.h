@@ -12,27 +12,31 @@
 #include <unistd.h>
 #include <string>
 
-class UnixServer {
+#include "observer.h"
+
+class UnixSocket : public ISubject
+{
 
 public:
-    UnixServer();
-    ~UnixServer();
+    UnixSocket();
+    ~UnixSocket();
     void run();
 
 private:
     void create();
-    void close_socket();
+    void closeSocket();
     void serve();
     void handle(int);
-    void register_handler();
-    bool get_ack(int);
-    bool send_response(int);
+    void registerHandler();
+    void notifyServer();
+    bool getAck(int);
+    bool sendResponse(int);
     static void interrupt(int);
 
     int server_;
     int ack_;
-    int* container_num_;
-    static const char* socket_name_;
+    int containerNum_;
+    static const char* socketName_;
 };
 
 
