@@ -1,4 +1,7 @@
-#include "observer.h"
+#ifndef INCLUDED_SERVER
+#define INCLUDED_SERVER
+
+#include "i_observer.h"
 
 class Server : public IObserver
 {
@@ -12,3 +15,4 @@ private:
     int shmKey_;
 };
 
+#endif

@@ -1,8 +1,8 @@
 #include <string>
 #include <iostream>
 
+#include "server.h"
 #include "unix_socket.h"
-#include "cpptoml.h"
 
 int
 main() {
@@ -16,7 +16,9 @@ main() {
 
     // initialize socket & server instance
     UnixSocket socket = UnixSocket();
-    // Server server = Server();
+    Server server = Server();
+
+
 
     // start server
 

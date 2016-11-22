@@ -1,5 +1,3 @@
-#pragma once
-
 #include <errno.h>
 #include <netdb.h>
 #include <stdio.h>
@@ -12,7 +10,7 @@
 #include <unistd.h>
 #include <string>
 
-#include "observer.h"
+#include "i_subject.h"
 
 class UnixSocket : public ISubject
 {

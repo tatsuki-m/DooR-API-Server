@@ -9,5 +9,6 @@ Server::~Server() {
 
 void
 Server::update(int num) {
+    shmKey_ = num;
 }
 
