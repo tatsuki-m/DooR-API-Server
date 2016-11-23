@@ -1,9 +1,9 @@
-#include "door_api_worker.h"
+#include "worker.h"
 
-DoorApiWorker::DoorApiWorker() : abort_(false), th_(&DoorApiWorker::run, this)  {
+Worker::Worker() : abort_(false), th_(&Worker::run, this)  {
 }
 
-DoorApiWorker::~DoorApiWorker() {
+Worker::~Worker() {
     std::cout << "+Worker::~Woker" << std::endl;
     abortThread();
     th_.join();
@@ -11,7 +11,7 @@ DoorApiWorker::~DoorApiWorker() {
 }
 
 void
-DoorApiWorker::abortThread() {
+Worker::abortThread() {
     std::lock_guard<std::mutex> lock(mtx_);
 
     if (!abort_) {
@@ -22,7 +22,7 @@ DoorApiWorker::abortThread() {
 }
 
 void
-DoorApiWorker::run() {
+Worker::run() {
     std::cout << "+Woker::run" << std::endl;
 
     while (true) {
@@ -43,7 +43,7 @@ DoorApiWorker::run() {
 }
 
 void
-DoorApiWorker::threadProc() {
+Worker::threadProc() {
     std::cout << "Thread run!" << std::endl;
 }
 

@@ -1,5 +1,5 @@
-#ifndef DOOR_API_WORKER_
-#define DOOR_API_WORKER_
+#ifndef WORKER_H_
+#define WORKER_H_
 
 #include <iostream>
 
@@ -8,11 +8,11 @@
 #include <condition_variable>
 #include <chrono>
 
-class DoorApiWorker
+class Worker
 {
 public:
-    DoorApiWorker();
-    virtual ~DoorApiWorker();
+    Worker();
+    virtual ~Worker();
     virtual void threadProc();
     void abortThread();
 
