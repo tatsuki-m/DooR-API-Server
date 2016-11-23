@@ -11,9 +11,14 @@ void
 DoorApiManager::create(int key) {
     shmKey_ = key;
     std::cout << "data = " << key << std::endl;
+    std::cout << "worker start" << std::endl;
+
+    DoorApiWorker worker1;
+    DoorApiWorker worker2;
+
 }
 
-string
-DooRApiManger::getShmKey(int key) {
+std::string
+DoorApiManager::getShmKey(int key) {
 }
 

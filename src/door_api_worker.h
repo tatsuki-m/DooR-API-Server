@@ -8,22 +8,22 @@
 #include <condition_variable>
 #include <chrono>
 
-class DoorApiWoker
+class DoorApiWorker
 {
 public:
-    DoorApiWoker();
+    DoorApiWorker();
     virtual ~DoorApiWorker();
     virtual void threadProc();
     void abortThread();
 
 private:
     bool abort_;
-    std::mutext mtx_;
+    std::mutex mtx_;
     std::condition_variable cv_;
     std::thread th_;
 
     void run();
-}
+};
 
 #endif
 

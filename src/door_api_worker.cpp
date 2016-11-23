@@ -1,13 +1,11 @@
 #include "door_api_worker.h"
 
-DoorApiWoker::DoorApiWorker() {
-    abort_ = false;
-    th_(&DoorApiWorker::run, this);
+DoorApiWorker::DoorApiWorker() : abort_(false), th_(&DoorApiWorker::run, this)  {
 }
 
-DoorApiWoker::~DoorApiWorker() {
+DoorApiWorker::~DoorApiWorker() {
     std::cout << "+Worker::~Woker" << std::endl;
-    abort_thread();
+    abortThread();
     th_.join();
     std::cout << "-Worker::~Woker" << std::endl;
 }
@@ -32,8 +30,8 @@ DoorApiWorker::run() {
         // auto sleep_time = std::chrono::seconds(1);
 
         if (abort_) {
-            std::cout << "aborted" << std::enld;
-            break
+            std::cout << "aborted" << std::endl;
+            break;
         }
         threadProc();
 
@@ -46,6 +44,6 @@ DoorApiWorker::run() {
 
 void
 DoorApiWorker::threadProc() {
-    std::cout << "Thread run!" << endl;
+    std::cout << "Thread run!" << std::endl;
 }
 
