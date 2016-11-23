@@ -13,7 +13,8 @@ class DoorApiWoker
 public:
     DoorApiWoker();
     virtual ~DoorApiWorker();
-    void abort_thread();
+    virtual void threadProc();
+    void abortThread();
 
 private:
     bool abort_;
@@ -22,7 +23,6 @@ private:
     std::thread th_;
 
     void run();
-    void thread_proc();
 }
 
 #endif

@@ -12,7 +12,6 @@ class DoorApiManager : public IObserver
 public:
     DoorApiManager();
     ~DoorApiManager();
-
     void create(int);
 
 private:
