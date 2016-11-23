@@ -4,6 +4,6 @@ IObserver::~IObserver() {
 }
 
 void
-IObserver::update(int num) {
+IObserver::create(int num) {
 }
 

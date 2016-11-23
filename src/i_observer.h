@@ -5,7 +5,7 @@ class IObserver
 {
 public:
     virtual ~IObserver();
-    virtual void update(int);
+    virtual void create(int);
 
 };
 

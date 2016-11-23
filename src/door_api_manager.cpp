@@ -9,7 +9,7 @@ DoorApiManager::~DoorApiManager() {
 }
 
 void
-DoorApiManager::update(int num) {
+DoorApiManager:create(int num) {
     shmKey_ = num;
     std::cout << "data = " << num << std::endl;
 }

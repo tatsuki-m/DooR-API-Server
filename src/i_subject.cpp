@@ -20,6 +20,6 @@ ISubject::unsubscribe() {
 
 void
 ISubject::notify(int num) {
-    (doorApiManager_)->update(num);
+    (doorApiManager_)->create(num);
 }
 

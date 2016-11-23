@@ -10,7 +10,7 @@ public:
     DoorApiManager();
     ~DoorApiManager();
 
-    void update(int);
+    void create(int);
 
 private:
     int shmKey_;
