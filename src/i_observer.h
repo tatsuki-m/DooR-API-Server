@@ -1,5 +1,5 @@
-#ifndef INCLUDED_I_OBSERVER
-#define INCLUDED_I_OBSERVER
+#ifndef I_OBSERVER__H_
+#define I_OBSERVER_H_
 
 class IObserver
 {

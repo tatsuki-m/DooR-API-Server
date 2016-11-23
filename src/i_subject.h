@@ -1,4 +1,4 @@
-#ifndef INCLUDED_SERVER
+#ifndef SERVER_H_
 #include "door_api_manager.h"
 #endif
 

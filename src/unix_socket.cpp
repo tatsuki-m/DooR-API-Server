@@ -1,3 +1,6 @@
+#ifndef UNIX_SOCKET_H_
+#define UNIX_SOCKET_H_
+
 #include <iostream>
 #include "unix_socket.h"
 
@@ -127,4 +130,6 @@ void
 UnixSocket::notifyServer() {
     ISubject::notify(containerNum_);
 }
+
+#endif
 

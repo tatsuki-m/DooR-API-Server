@@ -1,4 +1,3 @@
-#include <iostream>
 #include "door_api_manager.h"
 
 DoorApiManager::DoorApiManager() {
@@ -9,8 +8,12 @@ DoorApiManager::~DoorApiManager() {
 }
 
 void
-DoorApiManager:create(int num) {
-    shmKey_ = num;
-    std::cout << "data = " << num << std::endl;
+DoorApiManager::create(int key) {
+    shmKey_ = key;
+    std::cout << "data = " << key << std::endl;
+}
+
+string
+DooRApiManger::getShmKey(int key) {
 }
 
