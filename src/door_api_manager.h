@@ -4,11 +4,11 @@
 #include <stdio.h>
 #include "i_observer.h"
 
-class Server : public IObserver
+class DoorApiManager : public IObserver
 {
 public:
-    Server();
-    ~Server();
+    DoorApiManager();
+    ~DoorApiManager();
 
     void update(int);
 

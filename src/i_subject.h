@@ -1,5 +1,5 @@
 #ifndef INCLUDED_SERVER
-#include "server.h"
+#include "door_api_manager.h"
 #endif
 
 class ISubject
@@ -7,11 +7,11 @@ class ISubject
 public:
     ISubject();
     virtual ~ISubject();
-    virtual void subscribe(Server* server);
-    virtual void unsubscribe(Server* server);
+    virtual void subscribe(DoorApiManager* server);
+    virtual void unsubscribe();
     virtual void notify(int);
 
 private:
-    Server* server_;
+    DoorApiManager* doorApiManager_;
 };
 

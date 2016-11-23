@@ -9,17 +9,17 @@ ISubject::~ISubject() {
 }
 
 void
-ISubject::subscribe(Server* server) {
-    server_ = server;
+ISubject::subscribe(DoorApiManager* manager) {
+    doorApiManager_ = manager;
 }
 
 void
-ISubject::unsubscribe(Server* server) {
-    server_ = NULL;
+ISubject::unsubscribe() {
+    doorApiManager_ = NULL;
 }
 
 void
 ISubject::notify(int num) {
-    (server_)->update(num);
+    (doorApiManager_)->update(num);
 }
 

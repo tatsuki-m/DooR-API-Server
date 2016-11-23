@@ -1,7 +1,7 @@
 #include <string>
 #include <iostream>
 
-#include "server.h"
+#include "door_api_manager.h"
 #include "unix_socket.h"
 
 int
@@ -16,9 +16,9 @@ main() {
 
     // initialize socket & server instance
     UnixSocket socket = UnixSocket();
-    Server server = Server();
+    DoorApiManager doorApiManager = DoorApiManager();
 
-    socket.subscribe(&server);
+    socket.subscribe(&doorApiManager);
 
     // start server
     socket.run();
