@@ -1,8 +1,8 @@
 #include <string>
 #include <iostream>
 
+#include "door_api_manager.h"
 #include "unix_socket.h"
-#include "cpptoml.h"
 
 int
 main() {
@@ -16,9 +16,12 @@ main() {
 
     // initialize socket & server instance
     UnixSocket socket = UnixSocket();
-    // Server server = Server();
+    DoorApiManager doorApiManager = DoorApiManager();
+
+    socket.subscribe(&doorApiManager);
 
     // start server
+    socket.run();
 
 
     return 0;

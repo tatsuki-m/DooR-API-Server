@@ -1,3 +1,7 @@
+#ifndef UNIX_SOCKET_H_
+#define UNIX_SOCKET_H_
+
+#include <iostream>
 #include "unix_socket.h"
 
 const char* UnixSocket::socketName_ = "/tmp/unix-socket";
@@ -82,10 +86,9 @@ UnixSocket::handle(int client) {
     bool success;
     if (getAck(client)) {
         success = sendResponse(client);
-        // TODO; fix bug-increments 4 times
         if (success) {
-            containerNum_++;
             notifyServer();
+            containerNum_++;
         }
     }
 }
@@ -93,7 +96,7 @@ UnixSocket::handle(int client) {
 bool
 UnixSocket::getAck(int client) {
     recv(client, &ack_, sizeof(&ack_), 0);
-    printf("return ack_ =%d", ack_);
+    printf("return ack_ =%d\n", ack_);
 
     if (ack_ == 1)
       return true;
@@ -127,4 +130,6 @@ void
 UnixSocket::notifyServer() {
     ISubject::notify(containerNum_);
 }
+
+#endif
 
