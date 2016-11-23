@@ -6,6 +6,7 @@
 #include <stdio.h>
 
 #include "i_observer.h"
+#include "door_api_worker.h"
 
 class DoorApiManager : public IObserver
 {
@@ -15,7 +16,8 @@ public:
     void create(int);
 
 private:
-    string getShmKey(int);
+    std::string getShmKey(int);
+    void init();
     int shmKey_;
 };
 
