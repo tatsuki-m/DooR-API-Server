@@ -26,10 +26,9 @@ public:
     ~DoorApiWorker();
 
     bool initSharedMemory();
-    bool setStruct();
     bool getStruct();
 
-    SharedSt m_sharedSt;
+    SharedSt m_sharedSt_;
 
 private:
     managed_shared_memory *m_shm_;

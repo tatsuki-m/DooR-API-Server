@@ -15,13 +15,18 @@ DoorApiManager::create(int key) {
 
     DoorApiWorker *worker = new DoorApiWorker(shmKey);
     std::cout << "generate worker" << std::endl;
+    /*
+    while (true) {
+        std::cout << worker->m_sharedSt_.value << " " << worker->m_sharedSt_.valueFloat << std::endl;
+        sleep(1);
+    }
+    */
     delete worker;
 }
 
 std::string
 DoorApiManager::getShmKey(int key) {
-    const std::string kBaseKey = "shm_key";
-    std::string shmKey = kBaseKey + std::to_string(key);
+    std::string shmKey = "shm_key" + std::to_string(key);
     return shmKey;
 }
 

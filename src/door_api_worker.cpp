@@ -21,11 +21,18 @@ DoorApiWorker::initSharedMemory() {
      return true;
 }
 
-bool
-DoorApiWorker::setStruct() {
-}
 
 bool
 DoorApiWorker::getStruct() {
+    if( m_shm_ == NULL)
+        return false;
+
+    interprocess_mutex *mx = m_shm_->find_or_construct<interprocess_mutex>("TheMutex")();
+    SharedSt* SharedMemoryPointer = m_shm_->find_or_construct<SharedSt>("SharedSt")();
+
+    scoped_lock<interprocess_mutex> *lock = new scoped_lock<interprocess_mutex>(*mx);
+    memcpy( &m_sharedSt_, SharedMemoryPointer, sizeof(SharedSt));
+    delete lock;
+    return true;
 }
 
