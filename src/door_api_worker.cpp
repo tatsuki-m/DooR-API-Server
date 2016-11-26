@@ -1,49 +1,38 @@
 #include "door_api_worker.h"
 
-DoorApiWorker::DoorApiWorker() : abort_(false), th_(&DoorApiWorker::run, this)  {
+DoorApiWorker::DoorApiWorker(std::string sharedMemoryName) {
+    strcpy(m_sharedMemoryName_, sharedMemoryName.c_str());
+    m_shm_ = NULL;
 }
 
 DoorApiWorker::~DoorApiWorker() {
-    std::cout << "+Worker::~Woker" << std::endl;
-    abortThread();
-    th_.join();
-    std::cout << "-Worker::~Woker" << std::endl;
+    if (m_shm_ != NULL)  delete m_shm_;
 }
 
-void
-DoorApiWorker::abortThread() {
-    std::lock_guard<std::mutex> lock(mtx_);
+bool
+DoorApiWorker::initSharedMemory() {
+    int m_size;
+    m_size = sizeof(SharedSt) + 1024 * 10;
+    std::cout << m_size << "byte" << std::endl;
 
-    if (!abort_) {
-        std::cout << "notify abort event" << std::endl;
-        abort_ = true;
-        cv_.notify_all();
-    }
+    m_shm_ = new managed_shared_memory(open_or_create, m_sharedMemoryName_, m_size);
+    std::cout << "memory share!" << std::endl;
+
+     return true;
 }
 
-void
-DoorApiWorker::run() {
-    std::cout << "+Woker::run" << std::endl;
 
-    while (true) {
-        // std::unique_lock<std::mutex> lock(mtx_);
-        // auto sleep_time = std::chrono::seconds(1);
+bool
+DoorApiWorker::getStruct() {
+    if( m_shm_ == NULL)
+        return false;
 
-        if (abort_) {
-            std::cout << "aborted" << std::endl;
-            break;
-        }
-        threadProc();
+    interprocess_mutex *mx = m_shm_->find_or_construct<interprocess_mutex>("TheMutex")();
+    SharedSt* SharedMemoryPointer = m_shm_->find_or_construct<SharedSt>("SharedSt")();
 
-        // select sleeptime
-        // cv_.wait_for(lock, sleep_time, [this] { return abort_; });
-    }
-
-    std::cout << "-Worker::run" << std::endl;
-}
-
-void
-DoorApiWorker::threadProc() {
-    std::cout << "Thread run!" << std::endl;
+    scoped_lock<interprocess_mutex> *lock = new scoped_lock<interprocess_mutex>(*mx);
+    memcpy( &m_sharedSt_, SharedMemoryPointer, sizeof(SharedSt));
+    delete lock;
+    return true;
 }
 

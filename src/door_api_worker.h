@@ -1,28 +1,38 @@
-#ifndef DOOR_API_WORKER_
-#define DOOR_API_WORKER_
+#ifndef DOOR_API_WORKER_H_
+#define DOOR_API_WORKER_H_
 
 #include <iostream>
+#include <string>
 
-#include <thread>
-#include <mutex>
-#include <condition_variable>
-#include <chrono>
+#include <boost/interprocess/managed_shared_memory.hpp>
+#include <boost/interprocess/containers/vector.hpp>
+#include <boost/interprocess/allocators/allocator.hpp>
+#include <boost/interprocess/sync/interprocess_mutex.hpp>
+#include <boost/interprocess/sync/interprocess_mutex.hpp>
 
-class DoorApiWorker
+#include "worker.h"
+
+using namespace boost::interprocess;
+
+class DoorApiWorker : public Worker
 {
+    struct SharedSt {
+        int value;
+        double valueFloat;
+    };
+
 public:
-    DoorApiWorker();
-    virtual ~DoorApiWorker();
-    virtual void threadProc();
-    void abortThread();
+    DoorApiWorker(std::string);
+    ~DoorApiWorker();
+
+    bool initSharedMemory();
+    bool getStruct();
+
+    SharedSt m_sharedSt_;
 
 private:
-    bool abort_;
-    std::mutex mtx_;
-    std::condition_variable cv_;
-    std::thread th_;
-
-    void run();
+    managed_shared_memory *m_shm_;
+    char m_sharedMemoryName_[32];
 };
 
 #endif
