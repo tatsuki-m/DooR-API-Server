@@ -1,6 +1,7 @@
 #ifndef SERVER_H_
+#include <string>
+
 #include "door_api_manager.h"
-#endif
 
 class ISubject
 {
@@ -9,9 +10,11 @@ public:
     virtual ~ISubject();
     virtual void subscribe(DoorApiManager* server);
     virtual void unsubscribe();
-    virtual void notify(int);
+    virtual void notify(std::string);
 
 private:
     DoorApiManager* doorApiManager_;
 };
+
+#endif
 

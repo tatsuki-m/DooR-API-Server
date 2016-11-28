@@ -4,6 +4,6 @@ IObserver::~IObserver() {
 }
 
 void
-IObserver::create(int num) {
+IObserver::create(std::string) {
 }
 

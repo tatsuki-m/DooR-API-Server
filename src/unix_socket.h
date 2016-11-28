@@ -29,6 +29,7 @@ private:
     void notifyServer();
     bool getAck(int);
     bool sendResponse(int);
+    std::string getShmKey();
     static void interrupt(int);
 
     int server_;
