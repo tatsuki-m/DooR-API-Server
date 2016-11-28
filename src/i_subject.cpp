@@ -1,7 +1,6 @@
 #ifndef I_SUBJECT_H_
 #define I_SUBJECT_H_
 
-#include <cstddef>
 #include "i_subject.h"
 
 ISubject::ISubject() {
@@ -22,8 +21,8 @@ ISubject::unsubscribe() {
 }
 
 void
-ISubject::notify(int num) {
-    (doorApiManager_)->create(num);
+ISubject::notify(std::string shmKey) {
+    (doorApiManager_)->create(shmKey);
 }
 
 #endif

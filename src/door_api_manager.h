@@ -14,10 +14,9 @@ class DoorApiManager : public IObserver
 public:
     DoorApiManager();
     ~DoorApiManager();
-    void create(int);
+    void create(std::string);
 
 private:
-    std::string getShmKey(int);
 };
 
 #endif

@@ -107,8 +107,10 @@ UnixSocket::getAck(int client) {
 bool
 UnixSocket::sendResponse(int client) {
     int cc;
+    std::string shmKey = getShmKey();
+    const char *sendBuf = shmKey.c_str();
 
-    if ((cc = send(client, &containerNum_, sizeof(int), 0)) < 0) {
+    if ((cc = send(client, sendBuf, sizeof(sendBuf), 0)) < 0) {
         perror("send");
         return false;
     } else {
@@ -128,7 +130,13 @@ UnixSocket::interrupt(int) {
 
 void
 UnixSocket::notifyServer() {
-    ISubject::notify(containerNum_);
+    ISubject::notify(getShmKey());
+}
+
+std::string
+UnixSocket::getShmKey() {
+    std::string shmKey = "shm_key" + std::to_string(containerNum_);
+    return shmKey;
 }
 
 #endif
