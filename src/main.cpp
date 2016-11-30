@@ -13,9 +13,11 @@ main() {
     // {
     //    cout << val << endl;
     // };
+    // specify socket name
+    std::string socketName = "/tmp/unix-socket";
 
     // initialize socket & server instance
-    UnixSocket socket = UnixSocket();
+    UnixSocket socket = UnixSocket(socketName);
     DoorApiManager doorApiManager = DoorApiManager();
 
     socket.subscribe(&doorApiManager);

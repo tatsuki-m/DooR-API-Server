@@ -4,11 +4,12 @@
 #include <iostream>
 #include "unix_socket.h"
 
-const char* UnixSocket::socketName_ = "/tmp/unix-socket";
 
-UnixSocket::UnixSocket() {
+UnixSocket::UnixSocket(std::string socketName) {
+
     //register_handler();
-    unlink(socketName_);
+    unlink(socketName.c_str());
+    socketName_ = socketName.c_str();
     ack_ = 1;
     containerNum_ = 0;
 }
@@ -120,11 +121,6 @@ UnixSocket::sendResponse(int client) {
 
 void
 UnixSocket::closeSocket() {
-    unlink(socketName_);
-}
-
-void
-UnixSocket::interrupt(int) {
     unlink(socketName_);
 }
 
