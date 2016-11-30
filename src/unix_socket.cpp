@@ -10,7 +10,6 @@ UnixSocket::UnixSocket(std::string socketName) {
     //register_handler();
     unlink(socketName.c_str());
     socketName_ = socketName.c_str();
-    ack_ = 1;
     connectionNum_ = 0;
 }
 
@@ -85,6 +84,7 @@ UnixSocket::serve() {
 void
 UnixSocket::handle(int client) {
     bool success;
+
     if (getAck(client)) {
         success = sendResponse(client);
         if (success) {
@@ -99,7 +99,7 @@ UnixSocket::getAck(int client) {
     recv(client, &ack_, sizeof(&ack_), 0);
     printf("return ack_ =%d\n", ack_);
 
-    if (ack_ == 1)
+    if (ack_ == 0)
       return true;
     else
       return false;
@@ -131,7 +131,7 @@ UnixSocket::notifyServer() {
 
 std::string
 UnixSocket::getShmKey() {
-    std::string shmKey = "/tmp/unix-socket" + std::to_string(connectionNum_);
+    std::string shmKey = "shmKey" + std::to_string(connectionNum_);
     return shmKey;
 }
 
