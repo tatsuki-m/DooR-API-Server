@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 #include <stdio.h>
 
 #include "i_observer.h"
@@ -17,6 +18,7 @@ public:
     void create(std::string);
 
 private:
+    std::vector<DoorApiWorker*> p_doorApiWorkers;
 };
 
 #endif
