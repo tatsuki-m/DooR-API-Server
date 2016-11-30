@@ -34,7 +34,7 @@ private:
 
     int server_;
     int ack_;
-    int containerNum_;
+    int connectionNum_;
     const char* socketName_;
 };
 
