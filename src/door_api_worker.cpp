@@ -2,37 +2,50 @@
 
 DoorApiWorker::DoorApiWorker(std::string sharedMemoryName) {
     strcpy(m_sharedMemoryName_, sharedMemoryName.c_str());
-    m_shm_ = NULL;
+    instanceNum_ = 0;
+    initSharedMemory();
 }
 
 DoorApiWorker::~DoorApiWorker() {
-    if (m_shm_ != NULL)  delete m_shm_;
+    if (m_sharedMemoryBuffer != NULL)  delete m_sharedMemoryBuffer;
 }
 
 bool
 DoorApiWorker::initSharedMemory() {
-    int m_size;
-    m_size = sizeof(SharedSt) + 1024 * 10;
-    std::cout << m_size << "byte" << std::endl;
+    // use old  shared memory if exists else create a new one
+    shared_memory_object shm(open_or_create, m_sharedMemoryName_, read_write);
+    // set the size of the memory object
+    shm.truncate(sizeof(SharedMemoryBuffer));
+    mapped_region region(shm, read_write);
+    void *addr = region.get_address();
+    // creat a shared memory buffer in memory
+    m_sharedMemoryBuffer = new (addr) SharedMemoryBuffer;
 
-    m_shm_ = new managed_shared_memory(open_or_create, m_sharedMemoryName_, m_size);
-    std::cout << "memory share!" << std::endl;
-
-     return true;
+    std::cout << "instance for shared memory created" << std::endl;
+    return true;
 }
 
 
 bool
-DoorApiWorker::getStruct() {
-    if( m_shm_ == NULL)
+DoorApiWorker::run() {
+    if(m_sharedMemoryBuffer == NULL)
         return false;
 
-    interprocess_mutex *mx = m_shm_->find_or_construct<interprocess_mutex>("TheMutex")();
-    SharedSt* SharedMemoryPointer = m_shm_->find_or_construct<SharedSt>("SharedSt")();
-
-    scoped_lock<interprocess_mutex> *lock = new scoped_lock<interprocess_mutex>(*mx);
-    memcpy( &m_sharedSt_, SharedMemoryPointer, sizeof(SharedSt));
-    delete lock;
+    // waiting creation of DoorApi instance
+    while (true) {
+        // wait until the written number gets executed
+        m_sharedMemoryBuffer->writer.wait();
+            instanceNum_++;
+            strcpy(m_sharedMemoryBuffer->appShmKey, getAppShmKey().c_str());
+            std::cout << m_sharedMemoryBuffer->appShmKey << std::endl;
+        m_sharedMemoryBuffer->reader.post();
+    };
     return true;
+}
+
+std::string
+DoorApiWorker::getAppShmKey() {
+    std::string appShmKey = m_sharedMemoryName_ + std::to_string(instanceNum_);
+    return appShmKey;
 }
 

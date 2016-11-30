@@ -1,8 +1,8 @@
 #include <string>
 #include <iostream>
 
-#include "door_api_manager.h"
 #include "unix_socket.h"
+#include "door_api_manager.h"
 
 int
 main() {
