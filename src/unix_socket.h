@@ -13,13 +13,13 @@
 #include <thread>
 
 #include "i_subject.h"
-#include "worker.h"
+#include "key_generator.h"
 
 class UnixSocket : public ISubject
 {
 
 public:
-    UnixSocket(std::string);
+    UnixSocket();
     ~UnixSocket();
     void run();
 
@@ -32,13 +32,13 @@ private:
     void notifyServer();
     bool getAck(int);
     bool sendResponse(int);
-    std::string getShmKey();
     // static void interrupt(int);
 
     int server_;
     int ack_;
-    int connectionNum_;
-    const char* socketName_;
+    unsigned int connectionNum_;
+    static const char* socketName_;
+    static const char* baseKey_;
 };
 
 
