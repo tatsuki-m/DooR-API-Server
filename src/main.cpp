@@ -16,7 +16,6 @@ main() {
     //    cout << val << endl;
     // };
     // specify socket name
-    /*
     std::string socketName = "/tmp/unix-socket";
 
     // check main thread 
@@ -31,14 +30,15 @@ main() {
     // start server
     std::thread th(&UnixSocket::run, socket);
     th.join();
-    */
-
+    
+    /*j
     Worker* a, b, c;
 
     while (true) {
          std::cout << "main: " << std::this_thread::get_id() << std::endl;
          sleep(1);
     }
+    */
 
     return 0;
 }

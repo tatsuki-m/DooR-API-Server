@@ -1,11 +1,6 @@
 #include "door_api_worker.h"
 
-DoorApiWorker::DoorApiWorker(std::string sharedMemoryName) {
-    std::cout << "DoorApiWorker" << std::this_thread::get_id() << std::endl;
-    strcpy(m_sharedMemoryName_, sharedMemoryName.c_str());
-    instanceNum_ = 0;
-
-    // initSharedMemory();
+DoorApiWorker::DoorApiWorker(std::string sharedMemoryName): abort_(false), instanceNum_(0), th_(&DoorApiWorker::run, this, sharedMemoryName) {
 }
 
 DoorApiWorker::~DoorApiWorker() {
@@ -13,6 +8,27 @@ DoorApiWorker::~DoorApiWorker() {
         shared_memory_object::remove(m_sharedMemoryName_);
         delete m_sharedMemoryBuffer;
     }
+}
+
+void
+DoorApiWorker::run(std::string sharedMemoryName) {
+    std::cout << "run: " << std::this_thread::get_id() << std::endl;
+    std::cout << "+Woker::run" << std::endl;
+
+    // initialize sharedMemoryName
+    strcpy(m_sharedMemoryName_, sharedMemoryName.c_str());
+    initSharedMemory();
+
+    while (true) {
+        std::unique_lock<std::mutex> lock(mtx_);
+        auto sleep_time = std::chrono::seconds(1);
+        if (abort_) {
+            std::cout << "aborted" << std::endl;
+            break;
+        };
+        cv_.wait_for(lock, sleep_time, [this] { return abort_; });
+    }
+    std::cout << "-Worker::run" << std::endl;
 }
 
 bool
@@ -44,7 +60,10 @@ DoorApiWorker::initSharedMemory() {
 
 std::string
 DoorApiWorker::getAppShmKey() {
-    std::string appShmKey = m_sharedMemoryName_ + std::to_string(instanceNum_);
+    std::ostringstream sout;
+    sout << std::setfill('0') << std::setw(2) << instanceNum_;
+    std::string key = sout.str();
+    std::string appShmKey = m_sharedMemoryName_ + key;
     return appShmKey;
 }
 

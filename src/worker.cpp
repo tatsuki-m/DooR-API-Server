@@ -1,7 +1,6 @@
 #include "worker.h"
 
 Worker::Worker() : abort_(false), th_(&Worker::run, this)  {
-    std::cout << "Worker" << std::this_thread::get_id() << std::endl;
 }
 
 Worker::~Worker() {
