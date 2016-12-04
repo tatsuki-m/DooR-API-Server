@@ -3,12 +3,13 @@
 
 #include "unix_socket.h"
 
+const char* UnixSocket::socketName_ = "/tmp/unix-socket";
+const char* UnixSocket::baseKey_ = "shmKey";
 
-UnixSocket::UnixSocket(std::string socketName) {
+UnixSocket::UnixSocket() {
     std::cout << "UnixSocket" << std::this_thread::get_id() << std::endl;
     //register_handler();
-    unlink(socketName.c_str());
-    socketName_ = socketName.c_str();
+    unlink(socketName_);
     connectionNum_ = 0;
 }
 
@@ -109,8 +110,9 @@ UnixSocket::getAck(int client) {
 bool
 UnixSocket::sendResponse(int client) {
     int cc;
-    std::string shmKey = getShmKey();
+    std::string shmKey = KeyGenerator::createKey((char *)baseKey_, connectionNum_);
     const char *sendBuf = shmKey.c_str();
+    std::cout << sendBuf << std::endl;
 
     if ((cc = send(client, sendBuf, sizeof(sendBuf), 0)) < 0) {
         perror("send");
@@ -127,13 +129,8 @@ UnixSocket::closeSocket() {
 
 void
 UnixSocket::notifyServer() {
-    ISubject::notify(getShmKey());
-}
-
-std::string
-UnixSocket::getShmKey() {
-    std::string shmKey = "shmKey" + std::to_string(connectionNum_);
-    return shmKey;
+    std::string shmKey = KeyGenerator::createKey((char *)baseKey_, connectionNum_);
+    ISubject::notify(shmKey);
 }
 
 #endif

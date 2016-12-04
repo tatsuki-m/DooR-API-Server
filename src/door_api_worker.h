@@ -2,8 +2,6 @@
 #define DOOR_API_WORKER_H_
 
 #include <iostream>
-#include <sstream> /* ostringstream */
-#include <iomanip> /* setfill, setw */
 #include <string>
 #include <thread>
 #include <mutex>
@@ -14,7 +12,7 @@
 #include <boost/interprocess/mapped_region.hpp>
 #include <boost/interprocess/sync/interprocess_semaphore.hpp>
 
-#include "worker.h"
+#include "key_generator.h"
 
 using namespace boost::interprocess;
 

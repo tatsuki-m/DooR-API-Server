@@ -48,7 +48,8 @@ DoorApiWorker::initSharedMemory() {
             // wait until the written number gets executed
             m_sharedMemoryBuffer->writer.wait();
                 instanceNum_++;
-                strcpy(m_sharedMemoryBuffer->appShmKey, getAppShmKey().c_str());
+                std::string appShmKey = KeyGenerator::createKey(m_sharedMemoryName_, instanceNum_);
+                strcpy(m_sharedMemoryBuffer->appShmKey, appShmKey.c_str());
                 std::cout << m_sharedMemoryBuffer->appShmKey << std::endl;
             m_sharedMemoryBuffer->reader.post();
         };
@@ -58,12 +59,4 @@ DoorApiWorker::initSharedMemory() {
     return true;
 }
 
-std::string
-DoorApiWorker::getAppShmKey() {
-    std::ostringstream sout;
-    sout << std::setfill('0') << std::setw(2) << instanceNum_;
-    std::string key = sout.str();
-    std::string appShmKey = m_sharedMemoryName_ + key;
-    return appShmKey;
-}
 
