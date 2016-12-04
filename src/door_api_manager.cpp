@@ -11,7 +11,6 @@ DoorApiManager::create(std::string shmKey) {
     std::cout << "data = " << shmKey << std::endl;
     DoorApiWorker *worker = new DoorApiWorker(shmKey);
     p_doorApiWorkers.push_back(worker);
-    worker->initSharedMemory();
 
     std::cout << "generate worker" << std::endl;
     /*
@@ -20,6 +19,6 @@ DoorApiManager::create(std::string shmKey) {
         sleep(1);
     }
     */
-    delete worker;
+    // delete worker;
 }
 
