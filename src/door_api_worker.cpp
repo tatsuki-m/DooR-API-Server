@@ -1,8 +1,11 @@
 #include "door_api_worker.h"
 
 DoorApiWorker::DoorApiWorker(std::string sharedMemoryName) {
+    std::cout << "DoorApiWorker" << std::this_thread::get_id() << std::endl;
     strcpy(m_sharedMemoryName_, sharedMemoryName.c_str());
     instanceNum_ = 0;
+
+    // initSharedMemory();
 }
 
 DoorApiWorker::~DoorApiWorker() {

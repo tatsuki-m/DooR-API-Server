@@ -1,3 +1,4 @@
+#include <iostream>
 #include <errno.h>
 #include <netdb.h>
 #include <stdio.h>
@@ -9,8 +10,10 @@
 #include <sys/un.h>
 #include <unistd.h>
 #include <string>
+#include <thread>
 
 #include "i_subject.h"
+#include "worker.h"
 
 class UnixSocket : public ISubject
 {

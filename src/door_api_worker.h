@@ -25,8 +25,8 @@ class DoorApiWorker : public Worker
 public:
     DoorApiWorker(std::string);
     ~DoorApiWorker();
-    bool initSharedMemory();
 private:
+    bool initSharedMemory();
     std::string getAppShmKey();
 
     // variable for shared memory

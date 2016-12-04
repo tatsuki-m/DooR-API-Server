@@ -8,10 +8,10 @@ DoorApiManager::~DoorApiManager() {
 
 void
 DoorApiManager::create(std::string shmKey) {
+    std::cout << "DoorApiManger" << std::this_thread::get_id() << std::endl;
     std::cout << "data = " << shmKey << std::endl;
     DoorApiWorker *worker = new DoorApiWorker(shmKey);
     p_doorApiWorkers.push_back(worker);
-    worker->initSharedMemory();
 
     std::cout << "generate worker" << std::endl;
     /*

@@ -1,12 +1,11 @@
 #ifndef UNIX_SOCKET_H_
 #define UNIX_SOCKET_H_
 
-#include <iostream>
 #include "unix_socket.h"
 
 
 UnixSocket::UnixSocket(std::string socketName) {
-
+    std::cout << "UnixSocket" << std::this_thread::get_id() << std::endl;
     //register_handler();
     unlink(socketName.c_str());
     socketName_ = socketName.c_str();
@@ -75,8 +74,10 @@ UnixSocket::serve() {
     socklen_t clientlen = sizeof(client_addr);
 
     while (1) {
+        std::cout << "socket running" << std::endl;
         if ((client = accept(server_, (struct sockaddr *)&client_addr, &clientlen)) > 0)
             handle(client);
+        sleep(1);
     }
     closeSocket();
 }
