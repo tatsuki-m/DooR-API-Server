@@ -4,13 +4,13 @@
 #include <iostream>
 #include "unix_socket.h"
 
-const char* UnixSocket::socketName_ = "/tmp/unix-socket";
 
-UnixSocket::UnixSocket() {
+UnixSocket::UnixSocket(std::string socketName) {
+
     //register_handler();
-    unlink(socketName_);
-    ack_ = 1;
-    containerNum_ = 0;
+    unlink(socketName.c_str());
+    socketName_ = socketName.c_str();
+    connectionNum_ = 0;
 }
 
 UnixSocket::~UnixSocket() {
@@ -84,11 +84,12 @@ UnixSocket::serve() {
 void
 UnixSocket::handle(int client) {
     bool success;
+
     if (getAck(client)) {
+        connectionNum_++;
         success = sendResponse(client);
         if (success) {
             notifyServer();
-            containerNum_++;
         }
     }
 }
@@ -98,7 +99,7 @@ UnixSocket::getAck(int client) {
     recv(client, &ack_, sizeof(&ack_), 0);
     printf("return ack_ =%d\n", ack_);
 
-    if (ack_ == 1)
+    if (ack_ == 0)
       return true;
     else
       return false;
@@ -124,18 +125,13 @@ UnixSocket::closeSocket() {
 }
 
 void
-UnixSocket::interrupt(int) {
-    unlink(socketName_);
-}
-
-void
 UnixSocket::notifyServer() {
     ISubject::notify(getShmKey());
 }
 
 std::string
 UnixSocket::getShmKey() {
-    std::string shmKey = "shm_key" + std::to_string(containerNum_);
+    std::string shmKey = "shmKey" + std::to_string(connectionNum_);
     return shmKey;
 }
 

@@ -16,7 +16,7 @@ class UnixSocket : public ISubject
 {
 
 public:
-    UnixSocket();
+    UnixSocket(std::string);
     ~UnixSocket();
     void run();
 
@@ -30,12 +30,12 @@ private:
     bool getAck(int);
     bool sendResponse(int);
     std::string getShmKey();
-    static void interrupt(int);
+    // static void interrupt(int);
 
     int server_;
     int ack_;
-    int containerNum_;
-    static const char* socketName_;
+    int connectionNum_;
+    const char* socketName_;
 };
 
 

@@ -3,11 +3,11 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 #include <stdio.h>
 
 #include "i_observer.h"
 #include "door_api_worker.h"
-
 
 class DoorApiManager : public IObserver
 {
@@ -17,6 +17,7 @@ public:
     void create(std::string);
 
 private:
+    std::vector<DoorApiWorker*> p_doorApiWorkers;
 };
 
 #endif
