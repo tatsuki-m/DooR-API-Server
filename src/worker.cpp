@@ -23,23 +23,23 @@ Worker::abortThread() {
 
 void
 Worker::run() {
+    std::cout << "run: " << std::this_thread::get_id() << std::endl;
     std::cout << "+Woker::run" << std::endl;
     while (true) {
-        // std::unique_lock<std::mutex> lock(mtx_);
-        // auto sleep_time = std::chrono::seconds(1);
+        std::unique_lock<std::mutex> lock(mtx_);
+        auto sleep_time = std::chrono::seconds(1);
         if (abort_) {
             std::cout << "aborted" << std::endl;
             break;
-        }
+        };
         threadProc();
-        // select sleeptime
-        // cv_.wait_for(lock, sleep_time, [this] { return abort_; });
+        cv_.wait_for(lock, sleep_time, [this] { return abort_; });
     }
     std::cout << "-Worker::run" << std::endl;
 }
 
 void
 Worker::threadProc() {
-   //  std::cout << "Thread run!" << std::endl;
+   std::cout << "Thread run! " << std::this_thread::get_id() << std::endl;
 }
 

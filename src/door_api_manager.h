@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <stdio.h>
+#include <thread>
 
 #include "i_observer.h"
 #include "door_api_worker.h"
