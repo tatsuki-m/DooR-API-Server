@@ -19,20 +19,19 @@ class DoorApiWorker : public Worker
         // reader have to wait
         SharedMemoryBuffer(): writer(1), reader(0) {}
         interprocess_semaphore writer, reader;
-        char appShmKey[16];
+        char appShmKey[10];
     };
 
 public:
     DoorApiWorker(std::string);
     ~DoorApiWorker();
-    bool run();
-
-private:
     bool initSharedMemory();
+private:
     std::string getAppShmKey();
 
     // variable for shared memory
     SharedMemoryBuffer *m_sharedMemoryBuffer;
+
     char m_sharedMemoryName_[16];
     unsigned int instanceNum_;
 };

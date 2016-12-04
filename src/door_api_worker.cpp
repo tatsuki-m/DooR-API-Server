@@ -3,11 +3,13 @@
 DoorApiWorker::DoorApiWorker(std::string sharedMemoryName) {
     strcpy(m_sharedMemoryName_, sharedMemoryName.c_str());
     instanceNum_ = 0;
-    initSharedMemory();
 }
 
 DoorApiWorker::~DoorApiWorker() {
-    if (m_sharedMemoryBuffer != NULL)  delete m_sharedMemoryBuffer;
+    if (m_sharedMemoryBuffer != NULL) {
+        shared_memory_object::remove(m_sharedMemoryName_);
+        delete m_sharedMemoryBuffer;
+    }
 }
 
 bool
@@ -21,25 +23,19 @@ DoorApiWorker::initSharedMemory() {
     // creat a shared memory buffer in memory
     m_sharedMemoryBuffer = new (addr) SharedMemoryBuffer;
 
-    std::cout << "instance for shared memory created" << std::endl;
-    return true;
-}
-
-
-bool
-DoorApiWorker::run() {
-    if(m_sharedMemoryBuffer == NULL)
-        return false;
-
-    // waiting creation of DoorApi instance
-    while (true) {
-        // wait until the written number gets executed
-        m_sharedMemoryBuffer->writer.wait();
-            instanceNum_++;
-            strcpy(m_sharedMemoryBuffer->appShmKey, getAppShmKey().c_str());
-            std::cout << m_sharedMemoryBuffer->appShmKey << std::endl;
-        m_sharedMemoryBuffer->reader.post();
-    };
+    try {
+        // waiting creation of DoorApi instance
+        while (true) {
+            // wait until the written number gets executed
+            m_sharedMemoryBuffer->writer.wait();
+                instanceNum_++;
+                strcpy(m_sharedMemoryBuffer->appShmKey, getAppShmKey().c_str());
+                std::cout << m_sharedMemoryBuffer->appShmKey << std::endl;
+            m_sharedMemoryBuffer->reader.post();
+        };
+    } catch (interprocess_exception& e) {
+        std::cout << e.what() << std::endl;
+    }
     return true;
 }
 

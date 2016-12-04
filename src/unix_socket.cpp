@@ -86,9 +86,9 @@ UnixSocket::handle(int client) {
     bool success;
 
     if (getAck(client)) {
+        connectionNum_++;
         success = sendResponse(client);
         if (success) {
-            connectionNum_++;
             notifyServer();
         }
     }

@@ -9,7 +9,6 @@
 #include "i_observer.h"
 #include "door_api_worker.h"
 
-
 class DoorApiManager : public IObserver
 {
 public:
