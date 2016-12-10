@@ -1,0 +1,14 @@
+#include "shared_packet_information.h"
+
+SharedPacketInformation::SharedPacketInformation(): writer_(1), reader_(0) {
+    std::cout << "shared packet information" << std::endl;
+};
+
+SharedPacketInformation::~SharedPacketInformation() {
+}
+
+char*
+SharedPacketInformation::getSharedData() {
+    return sharedData_;
+}
+
