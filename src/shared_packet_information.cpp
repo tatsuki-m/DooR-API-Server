@@ -7,3 +7,8 @@ SharedPacketInformation::SharedPacketInformation(): writer_(1), reader_(0) {
 SharedPacketInformation::~SharedPacketInformation() {
 }
 
+char*
+SharedPacketInformation::getSharedData() {
+    return sharedData_;
+}
+

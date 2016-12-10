@@ -13,10 +13,10 @@ class SharedPacketInformation
 public:
     SharedPacketInformation();
     ~SharedPacketInformation();
-
-private:
+    char* getSharedData();
     interprocess_semaphore writer_, reader_;
-    char doorData_[100];
+private:
+    char sharedData_[100];
 };
 
 #endif

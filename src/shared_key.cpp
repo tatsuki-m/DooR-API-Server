@@ -7,3 +7,9 @@ SharedKey::SharedKey(): writer_(1), reader_(0) {
 SharedKey::~SharedKey() {
 }
 
+
+char*
+SharedKey::getSharedData() {
+    return sharedData_;
+}
+

@@ -17,10 +17,10 @@ class SharedMemory
 public:
     SharedMemory(std::string);
     ~SharedMemory();
-    // T initReadKey();
-    // bool initWriteKey(T);
+    T read();
+    bool write(T);
 private:
-    // U *m_sharedMemoryBuffer;
+    U *m_sharedMemoryBuffer_;
     const char* m_sharedMemoryName_;
 };
 #endif

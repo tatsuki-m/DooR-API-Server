@@ -13,9 +13,10 @@ class SharedKey
 public:
     SharedKey();
     ~SharedKey();
+    char* getSharedData();
+    interprocess_semaphore writer_, reader_;
 
 private:
-    interprocess_semaphore writer_, reader_;
     char sharedData_[16];
 };
 #endif
