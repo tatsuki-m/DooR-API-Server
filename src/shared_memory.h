@@ -9,7 +9,7 @@
 
 #include "shared_packet_information.h"
 #include "shared_key.h"
-#include "dpi_rule.h"
+#include "dpi.h"
 
 template <class T, class U=SharedPacketInformation> // T=shared data structure, U=Shared class with semaphore
 class SharedMemory
@@ -17,11 +17,17 @@ class SharedMemory
 public:
     SharedMemory(std::string);
     ~SharedMemory();
-    T read();
     bool write(T);
+    T read();
 private:
     U *m_sharedMemoryBuffer_;
+    T *sharedData_;
     const char* m_sharedMemoryName_;
 };
+
+
+// typedef SharedMemory<char*, SharedKey> SharedKeyMemory;
+// typedef SharedMemory<Dpi*, SharedPacketInformation> SharedPacketInfoMemory;
+
 #endif
 

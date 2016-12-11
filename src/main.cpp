@@ -6,17 +6,13 @@
 #include "door_api_manager.h"
 #include "worker.h"
 
+#include "shared_memory.h"
+#include "shared_key.h"
+#include "dpi.h"
+
 int
 main() {
-    // auto config = cpptoml::parse_file("../config.toml");
-    // auto vals = config->get_qualified_array_of<std::string>("app.shm_key");
-
-    // for (const auto& val  : *vals)
-    // {
-    //    cout << val << endl;
-    // };
-    // specify socket name
-
+    /*
     // check main thread 
     std::cout << "main" << std::this_thread::get_id() << std::endl;
 
@@ -27,10 +23,7 @@ main() {
     socket.subscribe(&doorApiManager);
 
     // start server
-    std::thread th(&UnixSocket::run, socket);
-    th.join();
-    
-    /*j
+    socket.run();
     Worker* a, b, c;
 
     while (true) {

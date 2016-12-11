@@ -3,8 +3,9 @@
 
 #include <iostream>
 #include <string>
-
 #include <boost/interprocess/sync/interprocess_semaphore.hpp>
+
+#include "dpi.h"
 
 using namespace boost::interprocess;
 
@@ -13,10 +14,9 @@ class SharedPacketInformation
 public:
     SharedPacketInformation();
     ~SharedPacketInformation();
-    char* getSharedData();
     interprocess_semaphore writer_, reader_;
+    Dpi* sharedData_;
 private:
-    char sharedData_[100];
 };
 
 #endif
