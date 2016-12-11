@@ -31,7 +31,7 @@ public:
     ~DoorApiWorker();
 private:
     void run(std::string);
-    bool initSharedMemory();
+    bool initWriteSharedMemory(std::string);
     std::string getAppShmKey();
 
     // variable for shared memory
