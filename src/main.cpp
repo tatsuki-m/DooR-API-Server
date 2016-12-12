@@ -32,5 +32,11 @@ main() {
     }
     */
 
+    std::string key = "hoge";
+    char sharedData[100] = "hoge";
+    SharedMemory<char*, SharedKey>* sharedKeyMemory1 = new SharedMemory<char*, SharedKey>(key);
+    // sharedKeyMemory1->write(sharedData);
+    char* hoge = sharedKeyMemory1->read();
+     std::cout << hoge << std::endl;
     return 0;
 }
