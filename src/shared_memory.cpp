@@ -27,7 +27,7 @@ SharedMemory<T, U>::write(T* sharedData) {
             std::cout << "start writing" << std::endl;
             m_sharedMemoryBuffer_->writer_.wait();
                 std::cout << "writer post" << std::endl;
-                memcpy(m_sharedMemoryBuffer_->sharedData_, sharedData, 100/*sizeof(T*)*/);
+                memcpy(m_sharedMemoryBuffer_->sharedData_, sharedData, U::getSharedDataSize());
             m_sharedMemoryBuffer_->reader_.post();
         };
     } catch (interprocess_exception& e) {
@@ -49,7 +49,7 @@ SharedMemory<T, U>::read(T** sharedData) {
         std::cout << "start reading" << std::endl;
         m_sharedMemoryBuffer_->reader_.wait();
             *sharedData  = new T;
-            memcpy(*sharedData, m_sharedMemoryBuffer_->sharedData_, 100);
+            memcpy(*sharedData, m_sharedMemoryBuffer_->sharedData_, U::getSharedDataSize());
         m_sharedMemoryBuffer_->writer_.post();
     } catch (interprocess_exception& e) {
         std::cout << e.what() << std::endl;
@@ -59,5 +59,5 @@ SharedMemory<T, U>::read(T** sharedData) {
 
 // Instantiation of explicit template
 template class SharedMemory<char, SharedKey>;
-template class SharedMemory<Dpi, SharedPacketInformation>;
+// template class SharedMemory<Dpi, SharedPacketInformation>;
 

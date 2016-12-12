@@ -13,9 +13,9 @@ class SharedKey
 public:
     SharedKey();
     ~SharedKey();
+    static size_t getSharedDataSize();
     interprocess_semaphore writer_, reader_;
     char sharedData_[16];
-
 private:
 };
 #endif
