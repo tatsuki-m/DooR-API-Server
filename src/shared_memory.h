@@ -18,7 +18,7 @@ public:
     SharedMemory(std::string);
     ~SharedMemory();
     bool write(T*);
-    T* read();
+    void read(T**);
 private:
     U* m_sharedMemoryBuffer_;
     T* sharedData_;

@@ -37,8 +37,8 @@ SharedMemory<T, U>::write(T* sharedData) {
 }
 
 template <class T, class U>
-T*
-SharedMemory<T, U>::read() {
+void
+SharedMemory<T, U>::read(T** sharedData) {
     std::cout << "read()" << std::endl;
     shared_memory_object shm(open_only, m_sharedMemoryName_, read_write);
     mapped_region region(shm, read_write);
@@ -48,10 +48,9 @@ SharedMemory<T, U>::read() {
     try {
         std::cout << "start reading" << std::endl;
         m_sharedMemoryBuffer_->reader_.wait();
-            T* sharedData = m_sharedMemoryBuffer_->sharedData_;
-            std::cout << sharedData << std::endl;
+            *sharedData  = new T;
+            memcpy(*sharedData, m_sharedMemoryBuffer_->sharedData_, 100);
         m_sharedMemoryBuffer_->writer_.post();
-        return sharedData;
     } catch (interprocess_exception& e) {
         std::cout << e.what() << std::endl;
     }
