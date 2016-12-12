@@ -59,5 +59,5 @@ SharedMemory<T, U>::read(T** sharedData) {
 
 // Instantiation of explicit template
 template class SharedMemory<char, SharedKey>;
-// template class SharedMemory<Dpi, SharedPacketInformation>;
+template class SharedMemory<Dpi, SharedPacketInformation>;
 

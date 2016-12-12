@@ -14,6 +14,7 @@ class SharedPacketInformation
 public:
     SharedPacketInformation();
     ~SharedPacketInformation();
+    static size_t getSharedDataSize();
     interprocess_semaphore writer_, reader_;
     Dpi* sharedData_;
 private:

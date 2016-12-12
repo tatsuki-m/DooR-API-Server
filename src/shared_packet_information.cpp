@@ -7,3 +7,8 @@ SharedPacketInformation::SharedPacketInformation(): writer_(1), reader_(0) {
 SharedPacketInformation::~SharedPacketInformation() {
 }
 
+size_t
+SharedPacketInformation::getSharedDataSize() {
+    return sizeof(Dpi);
+}
+
