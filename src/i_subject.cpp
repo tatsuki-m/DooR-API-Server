@@ -8,6 +8,7 @@ ISubject::ISubject() {
 
 ISubject::~ISubject() {
     // delegate destructor to unscribe method
+    unsubscribe();
 }
 
 void

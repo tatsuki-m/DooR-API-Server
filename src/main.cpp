@@ -24,20 +24,28 @@ main() {
 
     // start server
     socket.run();
-    Worker* a, b, c;
-
-    while (true) {
-         std::cout << "main: " << std::this_thread::get_id() << std::endl;
-         sleep(1);
-    }
     */
 
+    /*
     std::string key = "hoge";
     char sharedData[100] = "hoge";
     SharedMemory<char, SharedKey>* sharedKeyMemory1 = new SharedMemory<char, SharedKey>(key);
-    // sharedKeyMemory1->write(sharedData);
+    sharedKeyMemory0->write(sharedData);
     char* hoge = NULL;
     sharedKeyMemory1->read(&hoge);
     std::cout << hoge << std::endl;
+    */
+
+    std::string key = "hoge";
+    char data[1000] = "hoge";
+    char ipdata[10] = "hoge";
+    Dpi* dpi = new Dpi(1, ipdata, ipdata, 2, 3, data);
+    std::cout << sizeof(Dpi) << std::endl;
+    // std::cout << sizeof(*dpi) << std::endl;
+    SharedMemory<Dpi, SharedPacketInformation>* sharedKeyMemory2 = new SharedMemory<Dpi, SharedPacketInformation>(key);
+    // sharedKeyMemory2->write(dpi);
+    Dpi* dpi2 = new Dpi;
+    sharedKeyMemory2->read(&dpi);
+    std::cout << dpi2->dstPort_ << std::endl;
     return 0;
 }
