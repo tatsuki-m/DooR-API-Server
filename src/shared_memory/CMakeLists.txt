@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 2.8)
 
+# packet information"
+set (PROJECT_NAME "door_shared_memory")
+
+# set project name
+project(${PROJECT_NAME})
+
 # release build option 
 set(CMAKE_CXX_FLAGS_RELEASE "-Wall")
 
@@ -9,8 +15,6 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g")
 #set build type
 set(CMAKE_BUILD_TYPE Release)
 
-# set project name
-project(door_shared_memory)
 
 # set version
 set(serial "1.0.0")
@@ -19,14 +23,14 @@ set(serial "1.0.0")
 set(soserial "1")
 
 # include file
-file(GLOB Cpps "./*.cpp")
-file(GLOB Headers "./*.h")
+file(GLOB Srcs "./src/*.cpp")
+file(GLOB PUBLIC_HDRS "./src/*.h")
 
 # specify header file place
 include_directories("${PROJECT_SOURCE_DIR}")
 
 # build as shared library
-add_library(door_shared_memory SHARED ${Cpps})
+add_library(door_shared_memory SHARED ${Srcs})
 
 # apply library version
 set_target_properties(door_shared_memory PROPERTIES VERSION ${serial} SOVERSION ${soserial})
@@ -37,5 +41,5 @@ install(TARGETS door_shared_memory LIBRARY DESTINATION lib)
 
 # specify install of header file for shared library
 # /usr/local/include
-install(FILES ${Headers} DESTINATION include)
+install(FILES ${PUCLIC_HDRS} DESTINATION include)
 
