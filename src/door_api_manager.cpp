@@ -7,9 +7,8 @@ DoorApiManager::~DoorApiManager() {
 }
 
 void
-DoorApiManager::create(std::string shmKey) {
-    std::cout << "data = " << shmKey << std::endl;
-    DoorApiWorker *worker = new DoorApiWorker(shmKey);
+DoorApiManager::create(std::string doorBaseShmKey) {
+    DoorApiWorker *worker = new DoorApiWorker(doorBaseShmKey);
     p_doorApiWorkers.push_back(worker);
 
     std::cout << "generate worker" << std::endl;

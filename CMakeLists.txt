@@ -18,10 +18,13 @@ file(GLOB APISrcs "./src/*.cpp")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/src")
 
-# add door shared library
+# add door shared door_shared_memory
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/src/shared_memory")
-# add includes for shared_library
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/src/shared_memory")
+# add includes for door_shared_memory
+include_directories("${shared_memory_SOURCE_DIR}/src")
+# add library path for door_shared_memory
+set(CMAKE_LIBRARY_PATH "${door_shared_memory_BINNARY_DIR}" ${CMAKE_LIBRARY_PATH})
+
 
 # select executable file
 # add_executable(<exe-file>, files)

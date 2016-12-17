@@ -14,11 +14,12 @@ void
 DoorApiWorker::run(std::string sharedMemoryName) {
     std::cout << "run: " << std::this_thread::get_id() << std::endl;
     std::cout << "+Woker::run" << std::endl;
-
-    // initialize sharedMemoryName
+    
+    // initialize attribute
     strcpy(m_sharedMemoryName_, sharedMemoryName.c_str());
-    std::string appShmKey = KeyGenerator::createKey(m_sharedMemoryName_, instanceNum_);
-    initWriteSharedMemory(appShmKey);
+
+    // write key to shared memory
+    writeSharedMemory();
 
     while (true) {
         std::unique_lock<std::mutex> lock(mtx_);
@@ -33,7 +34,7 @@ DoorApiWorker::run(std::string sharedMemoryName) {
 }
 
 bool
-DoorApiWorker::initWriteSharedMemory(std::string appShmKey) {
+DoorApiWorker::writeSharedMemory() {
     // use old  shared memory if exists else create a new one
     shared_memory_object shm(open_or_create, m_sharedMemoryName_, read_write);
     // set the size of the memory object
@@ -49,8 +50,9 @@ DoorApiWorker::initWriteSharedMemory(std::string appShmKey) {
             // wait until the written number gets executed
             m_sharedMemoryBuffer->writer.wait();
                 instanceNum_++;
-                strcpy(m_sharedMemoryBuffer->appShmKey, appShmKey.c_str());
-                std::cout << m_sharedMemoryBuffer->appShmKey << std::endl;
+                std::string doorShmKey = KeyGenerator::createKey(m_sharedMemoryName_, instanceNum_);
+                strcpy(m_sharedMemoryBuffer->doorShmKey, doorShmKey.c_str());
+                std::cout << m_sharedMemoryBuffer->doorShmKey << std::endl;
             m_sharedMemoryBuffer->reader.post();
         };
     } catch (interprocess_exception& e) {

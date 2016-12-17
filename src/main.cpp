@@ -12,21 +12,19 @@
 
 int
 main() {
-    /*
     // check main thread 
     std::cout << "main" << std::this_thread::get_id() << std::endl;
 
     // initialize socket & server instance
     UnixSocket socket = UnixSocket();
     DoorApiManager doorApiManager = DoorApiManager();
-
     socket.subscribe(&doorApiManager);
 
     // start server
     socket.run();
-    */
 
     /*
+
     std::string key = "hoge";
     char sharedData[16] = "hogehoge";
     SharedMemory<char, SharedKey>* sharedKeyMemory1 = new SharedMemory<char, SharedKey>(key);
@@ -51,6 +49,8 @@ main() {
     free(dpi2);
     */
 
+    /*
+
     std::string key = "hoge";
     char sharedData[1000] = "hogehogehohogehoge";
     SharedMemory<char, SharedPacketInformation>* sharedKeyMemory1 = new SharedMemory<char, SharedPacketInformation>(key);
@@ -58,6 +58,7 @@ main() {
     char* hoge = NULL;
     sharedKeyMemory1->read(&hoge);
     std::cout << hoge << std::endl;
+    */
 
     return 0;
 }

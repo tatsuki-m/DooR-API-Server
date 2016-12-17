@@ -78,7 +78,6 @@ UnixSocket::serve() {
         std::cout << "socket running" << std::endl;
         if ((client = accept(server_, (struct sockaddr *)&client_addr, &clientlen)) > 0)
             handle(client);
-        sleep(1);
     }
     closeSocket();
 }

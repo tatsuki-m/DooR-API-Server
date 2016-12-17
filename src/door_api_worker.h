@@ -23,7 +23,7 @@ class DoorApiWorker
         // reader have to wait
         SharedMemoryBuffer(): writer(1), reader(0) {}
         interprocess_semaphore writer, reader;
-        char appShmKey[16];
+        char doorShmKey[16];
     };
 
 public:
@@ -31,7 +31,7 @@ public:
     ~DoorApiWorker();
 private:
     void run(std::string);
-    bool initWriteSharedMemory(std::string);
+    bool writeSharedMemory();
     std::string getAppShmKey();
 
     // variable for shared memory
