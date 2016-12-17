@@ -6,9 +6,9 @@
 #include "door_api_manager.h"
 #include "worker.h"
 
-#include "shared_memory.h"
 #include "shared_key.h"
-#include "dpi.h"
+#include "shared_memory.h"
+#include "shared_packet_information.h"
 
 int
 main() {

@@ -18,11 +18,13 @@ file(GLOB APISrcs "./src/*.cpp")
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}")
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/src")
 
-# add shared_memory
-file(GLOB ShmSrcs "./src/shared_memory/*.cpp")
+# add door shared library
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/src/shared_memory")
+# add includes for shared_library
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/src/shared_memory")
 
 # select executable file
 # add_executable(<exe-file>, files)
-add_executable(DooR-API-Server ${APISrcs} ${ShmSrcs})
+add_executable(DooR-API-Server ${APISrcs})
+target_link_libraries(DooR-API-Server door_shared_memory)
 
