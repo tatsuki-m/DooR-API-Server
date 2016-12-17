@@ -2,7 +2,7 @@
 #define DPI_H_
 
 #include <iostream>
-#include <string>
+#include <cstring>
 #include <time.h>
 
 class Dpi

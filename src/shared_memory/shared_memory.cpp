@@ -20,24 +20,11 @@ SharedMemory<T, U>::write(T* sharedData) {
     mapped_region region(shm, read_write);
     void *addr = region.get_address();
     m_sharedMemoryBuffer_ = new (addr) U;
-    // dpi = (Dpi *)malloc(1000);
 
     try {
         while(true) {
             std::cout << "start writing" << std::endl;
             m_sharedMemoryBuffer_->writer_.wait();
-                std::cout << "writer post" << std::endl;
-                std::cout << "=========method: shared data size===========" << std::endl;
-                std::cout << U::getSharedDataSize() << std::endl;
-                std::cout << "=========shared key or shared packet information=========" << std::endl;
-                std::cout << sizeof(U)+U::getSharedDataSize() << std::endl;
-                std::cout << "=========shared data size(argument)===========" << std::endl;
-                std::cout << sizeof(*sharedData) << std::endl;
-                std::cout << sharedData << std::endl;
-                std::cout << "=========m_sharedMemoryBuffer_->sharedData_===========" << std::endl;
-                std::cout << sizeof(*(m_sharedMemoryBuffer_->sharedData_)) << std::endl;
-                std::cout << m_sharedMemoryBuffer_->sharedData_ << std::endl;
-                std::cout << "==========finish mesuring size=========" << std::endl;
                 memcpy(m_sharedMemoryBuffer_->sharedData_, sharedData, U::getSharedDataSize());
             m_sharedMemoryBuffer_->reader_.post();
         };
@@ -60,6 +47,14 @@ SharedMemory<T, U>::read(T** sharedData) {
         std::cout << "start reading" << std::endl;
         m_sharedMemoryBuffer_->reader_.wait();
             *sharedData  = new T;
+            std::cout << U::getSharedDataSize() << std::endl;
+            std::cout << sizeof(Dpi) << std::endl;
+            /*
+            char data[1000] = "hoge";
+            char ipdata[10] = "hoge";
+            Dpi* dpi = new Dpi(1, ipdata, ipdata, 2, 3, data);
+            memcpy(*sharedData, dpi, U::getSharedDataSize());
+            */
             memcpy(*sharedData, m_sharedMemoryBuffer_->sharedData_, U::getSharedDataSize());
         m_sharedMemoryBuffer_->writer_.post();
     } catch (interprocess_exception& e) {
@@ -69,5 +64,6 @@ SharedMemory<T, U>::read(T** sharedData) {
 
 // Instantiation of explicit template
 template class SharedMemory<char, SharedKey>;
-template class SharedMemory<Dpi, SharedPacketInformation>;
+template class SharedMemory<char, SharedPacketInformation>;
+// template class SharedMemory<Dpi, SharedPacketInformation>;
 
