@@ -18,7 +18,7 @@ ISubject::subscribe(DoorApiManager* manager) {
 
 void
 ISubject::unsubscribe() {
-    doorApiManager_ = NULL;
+    delete doorApiManager_;
 }
 
 void

@@ -1,3 +1,9 @@
 /usr/local/lib/libdoor_shared_memory.so.1.0.0
 /usr/local/lib/libdoor_shared_memory.so.1
 /usr/local/lib/libdoor_shared_memory.so
+/usr/local/include/door_shared_memory/dpi.h
+/usr/local/include/door_shared_memory/shared_key.h
+/usr/local/include/door_shared_memory/shared_memory.h
+/usr/local/include/door_shared_memory/shared_packet_information.h
+/usr/local/share/cmake/door_shared_memory/door_shared_memory-config.cmake
+/usr/local/share/cmake/door_shared_memory/door_shared_memory-config-release.cmake
