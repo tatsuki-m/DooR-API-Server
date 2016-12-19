@@ -34,16 +34,18 @@ main() {
     sharedKey
 */
 
-/*
     std::string key = "hoge";
     char sharedData[16] = "hogehoge";
     SharedMemory<char, SharedKey>* sharedKeyMemory1 = new SharedMemory<char, SharedKey>(key);
-//    sharedKeyMemory1->write(sharedData);
+   // sharedKeyMemory1->write(sharedData);
     char* hoge = NULL;
     sharedKeyMemory1->read(&hoge);
     std::cout << hoge << std::endl;
-*/
 
+    //delete[] sharedData;
+    //delete sharedKeyMemory1;
+
+/*
     std::string key = "hoge";
     //char data[1000] = "hoge";
     //char ipdata[10] = "hoge";
@@ -61,17 +63,7 @@ main() {
     std::cout << dpi2->dstPort_ << std::endl;
     delete dpi;
     delete dpi2;
-
-/*
-    std::string key = "hoge";
-    char sharedData[1000] = "hogehogehohogehoge";
-    SharedMemory<char, SharedPacketInformation>* sharedKeyMemory1 = new SharedMemory<char, SharedPacketInformation>(key);
-    //sharedKeyMemory2->write(sharedData);
-    char* hoge = NULL;
-    sharedKeyMemory1->read(&hoge);
-    std::cout << hoge << std::endl;
 */
-
 
     return 0;
 }

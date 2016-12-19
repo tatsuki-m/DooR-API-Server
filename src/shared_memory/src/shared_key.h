@@ -14,6 +14,8 @@ public:
     SharedKey();
     ~SharedKey();
     static size_t getSharedDataSize();
+    void writeDataToShm(char*);
+    void readDataFromShm(char*);
     interprocess_semaphore writer_, reader_;
     char sharedData_[16];
 private:
