@@ -108,10 +108,11 @@ UnixSocket::getAck(int client) {
 
 bool
 UnixSocket::sendResponse(int client) {
+    std::cout << "UnixScoket::sendResponse" << std::endl;
     int cc;
     std::string shmKey = KeyGenerator::createKey((char *)baseKey_, connectionNum_);
     const char *sendBuf = shmKey.c_str();
-    std::cout << sendBuf << std::endl;
+    std::cout << "bridgeKey: " << sendBuf << std::endl;
 
     if ((cc = send(client, sendBuf, sizeof(sendBuf), 0)) < 0) {
         perror("send");

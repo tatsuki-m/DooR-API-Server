@@ -14,7 +14,7 @@ SharedMemory<T, U>::~SharedMemory() {
 template <class T, class U>
 bool
 SharedMemory<T, U>::write(T* sharedData) {
-    std::cout << "write()" << std::endl;
+    std::cout << "SharedMemory::write()" << std::endl;
     shared_memory_object shm(open_or_create, m_sharedMemoryName_, read_write);
     shm.truncate(sizeof(U)+U::getSharedDataSize());
     mapped_region region(shm, read_write);
@@ -23,9 +23,18 @@ SharedMemory<T, U>::write(T* sharedData) {
 
     try {
         while(true) {
-            std::cout << "start writing" << std::endl;
             m_sharedMemoryBuffer_->writer_.wait();
-                memcpy(m_sharedMemoryBuffer_->sharedData_, sharedData, U::getSharedDataSize());
+                std::cout << "start writing" << std::endl;
+              /*
+                m_sharedMemoryBuffer_->sharedData_.id_ = sharedData->id_;
+                m_sharedMemoryBuffer_->sharedData_.srcPort_= sharedData->srcPort_;
+                m_sharedMemoryBuffer_->sharedData_.dstPort_ = sharedData->dstPort_;
+                std::cout << "memory id " << m_sharedMemoryBuffer_->sharedData_.id_ << std::endl;
+              */
+
+                //memcpy(m_sharedMemoryBuffer_->sharedData_, sharedData, U::getSharedDataSize());
+                m_sharedMemoryBuffer_->writeDataToShm(sharedData);
+                std::cout << "m_sharedMemoryBuffer_->sharedData_.id_: " << m_sharedMemoryBuffer_->sharedData_.id_ << std::endl;
             m_sharedMemoryBuffer_->reader_.post();
         };
     } catch (interprocess_exception& e) {
@@ -37,25 +46,28 @@ SharedMemory<T, U>::write(T* sharedData) {
 template <class T, class U>
 void
 SharedMemory<T, U>::read(T** sharedData) {
-    std::cout << "read()" << std::endl;
+    std::cout << "SharedMemory::read()" << std::endl;
     shared_memory_object shm(open_only, m_sharedMemoryName_, read_write);
     mapped_region region(shm, read_write);
     void *addr = region.get_address();
     m_sharedMemoryBuffer_ = static_cast<U*>(addr);
 
     try {
-        std::cout << "start reading" << std::endl;
         m_sharedMemoryBuffer_->reader_.wait();
-            *sharedData  = new T;
-            std::cout << U::getSharedDataSize() << std::endl;
-            std::cout << sizeof(Dpi) << std::endl;
+            std::cout << "start reading" << std::endl;
+            //*sharedData  = new T[U::getSharedDataSize()];
+            //memcpy(*sharedData, m_sharedMemoryBuffer_->sharedData_, U::getSharedDataSize());
             /*
-            char data[1000] = "hoge";
-            char ipdata[10] = "hoge";
-            Dpi* dpi = new Dpi(1, ipdata, ipdata, 2, 3, data);
-            memcpy(*sharedData, dpi, U::getSharedDataSize());
+            *sharedData = new T;
+            std::cout << "sharedData: " << (*sharedData)->id_ << std::endl;
+            std::cout << "m_shareMemoryBuffer: " << m_sharedMemoryBuffer_->sharedData_.id_ << std::endl;
+            (*sharedData)->id_ =  m_sharedMemoryBuffer_->sharedData_.id_;
+            (*sharedData)->srcPort_ =  m_sharedMemoryBuffer_->sharedData_.srcPort_;
+            (*sharedData)->dstPort_ =  m_sharedMemoryBuffer_->sharedData_.dstPort_;
             */
-            memcpy(*sharedData, m_sharedMemoryBuffer_->sharedData_, U::getSharedDataSize());
+          *sharedData = new T;
+          m_sharedMemoryBuffer_->readDataFromShm(*sharedData);
+          //memcpy(*sharedData, m_sharedMemoryBuffer_->sharedData_, U::getSharedDataSize());
         m_sharedMemoryBuffer_->writer_.post();
     } catch (interprocess_exception& e) {
         std::cout << e.what() << std::endl;
@@ -63,7 +75,8 @@ SharedMemory<T, U>::read(T** sharedData) {
 }
 
 // Instantiation of explicit template
-template class SharedMemory<char, SharedKey>;
-template class SharedMemory<char, SharedPacketInformation>;
-// template class SharedMemory<Dpi, SharedPacketInformation>;
+//template class SharedMemory<char, SharedKey>;
+//template class SharedMemory<char, SharedPacketInformation>;
+template class SharedMemory<Dpi, SharedPacketInformation>;
+//template class SharedMemory<Dpi2, SharedPacketInformation>;
 

@@ -59,3 +59,4 @@ install(EXPORT door_shared_memory_export
     FILE door_shared_memory-config.cmake
     DESTINATION "share/cmake/${PROJECT_NAME}/"
     EXPORT_LINK_INTERFACE_LIBRARIES)
+

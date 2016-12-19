@@ -14,7 +14,7 @@ void
 DoorApiWorker::run(std::string sharedMemoryName) {
     std::cout << "run: " << std::this_thread::get_id() << std::endl;
     std::cout << "+Woker::run" << std::endl;
-    
+
     // initialize attribute
     strcpy(m_sharedMemoryName_, sharedMemoryName.c_str());
 
@@ -35,6 +35,7 @@ DoorApiWorker::run(std::string sharedMemoryName) {
 
 bool
 DoorApiWorker::writeSharedMemory() {
+    std::cout << "DoorApiWorker::writeSharedMemory()" << std::endl;
     // use old  shared memory if exists else create a new one
     shared_memory_object shm(open_or_create, m_sharedMemoryName_, read_write);
     // set the size of the memory object
@@ -52,7 +53,7 @@ DoorApiWorker::writeSharedMemory() {
                 instanceNum_++;
                 std::string doorShmKey = KeyGenerator::createKey(m_sharedMemoryName_, instanceNum_);
                 strcpy(m_sharedMemoryBuffer->doorShmKey, doorShmKey.c_str());
-                std::cout << m_sharedMemoryBuffer->doorShmKey << std::endl;
+                std::cout << "doorShmKey: " << m_sharedMemoryBuffer->doorShmKey << std::endl;
             m_sharedMemoryBuffer->reader.post();
         };
     } catch (interprocess_exception& e) {

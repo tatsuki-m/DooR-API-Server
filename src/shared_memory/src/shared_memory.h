@@ -19,9 +19,9 @@ public:
     ~SharedMemory();
     bool write(T*);
     void read(T**);
-private:
-    U* m_sharedMemoryBuffer_;
     T* sharedData_;
+    U* m_sharedMemoryBuffer_;
+private:
     const char* m_sharedMemoryName_;
 };
 

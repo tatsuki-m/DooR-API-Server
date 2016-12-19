@@ -5,6 +5,7 @@ SharedKey::SharedKey(): writer_(1), reader_(0) {
 }
 
 SharedKey::~SharedKey() {
+    delete[] sharedData_;
 }
 
 size_t

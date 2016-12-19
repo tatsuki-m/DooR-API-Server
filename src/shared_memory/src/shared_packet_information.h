@@ -14,11 +14,12 @@ class SharedPacketInformation
 public:
     SharedPacketInformation();
     ~SharedPacketInformation();
+
+    void writeDataToShm(Dpi*);
+    void readDataFromShm(Dpi*);
     static size_t getSharedDataSize();
     interprocess_semaphore writer_, reader_;
-    char sharedData_[1000];
-    // Dpi* sharedData_;
-private:
+    Dpi sharedData_;
 };
 
 #endif
