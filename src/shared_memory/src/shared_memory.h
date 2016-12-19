@@ -25,8 +25,6 @@ private:
     const char* m_sharedMemoryName_;
 };
 
-// typedef SharedMemory<char*, SharedKey> SharedKeyMemory;
-// typedef SharedMemory<Dpi*, SharedPacketInformation> SharedPacketInfoMemory;
 
 #endif
 

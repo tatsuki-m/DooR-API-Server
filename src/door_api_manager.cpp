@@ -4,6 +4,7 @@ DoorApiManager::DoorApiManager() {
 }
 
 DoorApiManager::~DoorApiManager() {
+    // delete door worker api
 }
 
 void
