@@ -19,26 +19,28 @@ class UnixSocket : public ISubject
 {
 
 public:
-    UnixSocket();
+    UnixSocket(std::string socketName);
+    UnixSocket(std::string socketName, unsigned int workerID);
     ~UnixSocket();
     void run();
 
 private:
+    enum Type {
+        SHARED_SOCKET = 0,
+        SHARED_MEMORY = 1,
+    } type_;
+
     void create();
     void closeSocket();
     void serve();
     void handle(int);
-    void registerHandler();
-    void notifyServer();
-    bool getAck(int);
-    bool sendResponse(int);
-    // static void interrupt(int);
-
+    void notifyServer(std::string);
+    void sendSocketName(int);
+    bool getRequest(int, char&);
     int server_;
-    int ack_;
+    unsigned int workerID_;
     unsigned int connectionNum_;
-    static const char* socketName_;
-    static const char* baseKey_;
+    std::string socketName_;
 };
 
 
