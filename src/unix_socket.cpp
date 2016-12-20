@@ -3,28 +3,26 @@
 
 #include "unix_socket.h"
 std::string DOOR_BASE_SHM_KEY = "shmKey";
-std::string BASE_SOCKET_DIR = "/tmp/unix-socket";
-std::string BASE_SOCKET_NAME = "unix-socket";
+std::string BASE_SOCKET_NAME = "/tmp/unix-socket";
 
 UnixSocket::UnixSocket() {
     std::cout << "UnixSocket: " << std::this_thread::get_id() << std::endl;
     unlink(socketName_.c_str());
-    socketName_ = BASE_SOCKET_DIR;
+    socketName_ = BASE_SOCKET_NAME;
     connectionNum_ = 0;
     workerID_ = 0;
-    type_ = SHARED_SOCKET;
 }
 
 UnixSocket::UnixSocket(std::string socketName, unsigned int workerID) {
     std::cout << "UnixSocket: " << std::this_thread::get_id() << std::endl;
     unlink(socketName_.c_str());
     socketName_ = socketName;
-    workerID_ = workerID_;
     connectionNum_ = 0;
-    type_ = SHARED_MEMORY;
+    workerID_ = workerID_;
 }
 
 UnixSocket::~UnixSocket() {
+    closeSocket();
 }
 
 void
@@ -96,12 +94,12 @@ UnixSocket::serve() {
 void
 UnixSocket::handle(int client) {
     bool success;
-    char req;
-    if ((req = getRequest(client, req)) != '\0') {
-        switch(type_) {
+    SocketAck ack;
+    if ((ack.request = getRequest(client, ack)) != '\0') {
+        switch(ack.type) {
             case SHARED_SOCKET:
                 connectionNum_++;
-                sendSocketName(client);
+                sendSocketName(client, ack);
                 break;
             case SHARED_MEMORY:
                 break;
@@ -112,10 +110,10 @@ UnixSocket::handle(int client) {
 }
 
 bool
-UnixSocket::getRequest(int client, char &req) {
+UnixSocket::getRequest(int client, SocketAck &ack) {
     std::cout << "UnixScoket::getRequest: " << std::endl;
     int cc;
-    if ((cc=recv(client, &req, sizeof(req), 0)) > 0) {
+    if ((cc=recv(client, &ack, sizeof(ack), 0)) > 0) {
         return true;
     } else {
         return false;
@@ -123,14 +121,14 @@ UnixSocket::getRequest(int client, char &req) {
 }
 
 void
-UnixSocket::sendSocketName(int client) {
+UnixSocket::sendSocketName(int client, SocketAck &ack) {
     std::cout << "UnixSocket::sendSocketName: " << std::endl;
     int cc;
     std::string socketName = KeyGenerator::createSocketName(BASE_SOCKET_NAME, connectionNum_);
-    const char *sendBuf = socketName.c_str();
+    strcpy(ack.data, socketName.c_str());
 
     try {
-        if ((cc = send(client, sendBuf, sizeof(sendBuf), 0)) < 0) {
+        if ((cc = send(client, &ack, sizeof(ack), 0)) < 0) {
             std::cerr << "UnixSocket::sendSocketName";
             throw;
         } else {
@@ -152,7 +150,6 @@ UnixSocket::closeSocket() {
     std::cout << "UnixSocket::closeSocket()" << std::endl;
     unlink(socketName_.c_str());
 }
-
 
 #endif  /* UNIX_SOCKET_H */
 

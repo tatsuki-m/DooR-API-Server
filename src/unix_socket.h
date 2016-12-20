@@ -14,6 +14,7 @@
 
 #include "i_subject.h"
 #include "key_generator.h"
+#include "socket_ack.h"
 
 class UnixSocket : public ISubject
 {
@@ -25,18 +26,13 @@ public:
     void run();
 
 private:
-    enum Type {
-        SHARED_SOCKET = 0,
-        SHARED_MEMORY = 1,
-    } type_;
-
     void create();
     void closeSocket();
     void serve();
     void handle(int);
     void notifyServer(std::string);
-    void sendSocketName(int);
-    bool getRequest(int, char&);
+    void sendSocketName(int, SocketAck&);
+    bool getRequest(int, SocketAck&);
     int server_;
     unsigned int workerID_;
     unsigned int connectionNum_;
