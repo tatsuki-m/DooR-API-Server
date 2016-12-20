@@ -3,11 +3,13 @@
 
 #include "unix_socket.h"
 std::string DOOR_BASE_SHM_KEY = "shmKey";
+std::string BASE_SOCKET_DIR = "/tmp/unix-socket";
 std::string BASE_SOCKET_NAME = "unix-socket";
 
-UnixSocket::UnixSocket(std::string socketName) {
+UnixSocket::UnixSocket() {
     std::cout << "UnixSocket: " << std::this_thread::get_id() << std::endl;
     unlink(socketName_.c_str());
+    socketName_ = BASE_SOCKET_DIR;
     connectionNum_ = 0;
     workerID_ = 0;
     type_ = SHARED_SOCKET;
@@ -16,6 +18,7 @@ UnixSocket::UnixSocket(std::string socketName) {
 UnixSocket::UnixSocket(std::string socketName, unsigned int workerID) {
     std::cout << "UnixSocket: " << std::this_thread::get_id() << std::endl;
     unlink(socketName_.c_str());
+    socketName_ = socketName;
     workerID_ = workerID_;
     connectionNum_ = 0;
     type_ = SHARED_MEMORY;

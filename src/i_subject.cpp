@@ -22,8 +22,8 @@ ISubject::unsubscribe() {
 }
 
 void
-ISubject::notify(std::string shmKey) {
-    (doorApiManager_)->create(shmKey);
+ISubject::notify(std::string socketName) {
+    (doorApiManager_)->create(socketName);
 }
 
 #endif

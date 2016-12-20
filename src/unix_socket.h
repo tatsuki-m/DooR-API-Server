@@ -19,7 +19,7 @@ class UnixSocket : public ISubject
 {
 
 public:
-    UnixSocket(std::string socketName);
+    UnixSocket();
     UnixSocket(std::string socketName, unsigned int workerID);
     ~UnixSocket();
     void run();
