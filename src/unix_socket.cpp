@@ -7,18 +7,18 @@ std::string BASE_SOCKET_NAME = "/tmp/unix-socket";
 
 UnixSocket::UnixSocket() {
     std::cout << "UnixSocket: " << std::this_thread::get_id() << std::endl;
-    unlink(socketName_.c_str());
     socketName_ = BASE_SOCKET_NAME;
     connectionNum_ = 0;
     workerID_ = 0;
+    unlink(socketName_.c_str());
 }
 
 UnixSocket::UnixSocket(std::string socketName, unsigned int workerID) {
     std::cout << "UnixSocket: " << std::this_thread::get_id() << std::endl;
-    unlink(socketName_.c_str());
     socketName_ = socketName;
     connectionNum_ = 0;
-    workerID_ = workerID_;
+    workerID_ = workerID;
+    unlink(socketName_.c_str());
 }
 
 UnixSocket::~UnixSocket() {
@@ -43,7 +43,7 @@ UnixSocket::create() {
         strncpy(server_addr.sun_path, socketName_.c_str(), sizeof(server_addr.sun_path) -1);
 
         // create socket
-        server_ = socket(PF_UNIX, SOCK_STREAM, 0);
+        server_ = socket(AF_UNIX, SOCK_STREAM, 0);
         if (!server_) {
             std::cerr << "UnixSocket::Create socket: ";
             throw;
@@ -61,7 +61,7 @@ UnixSocket::create() {
         }
 
         // convert the socket listen for incoming connections
-        if (listen(server_, SOMAXCONN) < 0) {
+        if (listen(server_, 10) < 0) {
             std::cerr << "UnixSocket::Create listen: ";
             throw;
         }
