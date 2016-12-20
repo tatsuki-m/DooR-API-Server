@@ -2,30 +2,28 @@
 #define UNIX_SOCKET_H_
 
 #include "unix_socket.h"
-
-const char* UnixSocket::socketName_ = "/tmp/unix-socket";
-const char* UnixSocket::baseKey_ = "shmKey";
+std::string DOOR_BASE_SHM_KEY = "shmKey";
+std::string BASE_SOCKET_NAME = "/tmp/unix-socket";
 
 UnixSocket::UnixSocket() {
-    std::cout << "UnixSocket" << std::this_thread::get_id() << std::endl;
-    //register_handler();
-    unlink(socketName_);
+    std::cout << "UnixSocket: " << std::this_thread::get_id() << std::endl;
+    socketName_ = BASE_SOCKET_NAME;
     connectionNum_ = 0;
+    workerID_ = 0;
+    unlink(socketName_.c_str());
+}
+
+UnixSocket::UnixSocket(std::string socketName, unsigned int workerID) {
+    std::cout << "UnixSocket: " << std::this_thread::get_id() << std::endl;
+    socketName_ = socketName;
+    connectionNum_ = 0;
+    workerID_ = workerID;
+    unlink(socketName_.c_str());
 }
 
 UnixSocket::~UnixSocket() {
+    closeSocket();
 }
-
-/*
-void
-register_handler() {
-    struct sigaction sigIntHandler;
-    sigIntHandler.sa_handler = interrupt;
-    sigemptyset(&sigIntHandler.sa_mask);
-    sigIntHandler.sa_flags = 0;
-    sigaction(SIGINT, &sigIntHandler, NULL);
-}
-*/
 
 void
 UnixSocket::run() {
@@ -35,36 +33,40 @@ UnixSocket::run() {
 
 void
 UnixSocket::create() {
-    struct sockaddr_un server_addr;
-    int soval = 1;
+    try {
+        struct sockaddr_un server_addr;
+        int soval = 1;
 
-    // setup socket address structure
-    memset(&server_addr, 0, sizeof(server_addr));
-    server_addr.sun_family = AF_UNIX;
-    strncpy(server_addr.sun_path, socketName_, sizeof(server_addr.sun_path) -1);
+        // setup socket address structure
+        memset(&server_addr, 0, sizeof(server_addr));
+        server_addr.sun_family = AF_UNIX;
+        strncpy(server_addr.sun_path, socketName_.c_str(), sizeof(server_addr.sun_path) -1);
 
-    // create socket
-    server_ = socket(PF_UNIX, SOCK_STREAM, 0);
-    if (!server_) {
-        perror("socket");
-        exit(-1);
-    }
+        // create socket
+        server_ = socket(AF_UNIX, SOCK_STREAM, 0);
+        if (!server_) {
+            std::cerr << "UnixSocket::Create socket: ";
+            throw;
+        }
 
-    if (setsockopt(server_, SOL_SOCKET, SO_REUSEADDR, &soval, sizeof(soval)) == -1 ) {
-        perror("setsockopt");
-        exit(-1);
-    }
+        if (setsockopt(server_, SOL_SOCKET, SO_REUSEADDR, &soval, sizeof(soval)) == -1 ) {
+            std::cerr << "UnixSocket::Create setsockopt: ";
+            throw;
+        }
 
-    // call bind to associate the socket with the UNIX file system
-    if (bind(server_, (const struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
-        perror("bind");
-        exit(-1);
-    }
+        // call bind to associate the socket with the UNIX file system
+        if (bind(server_, (const struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
+            std::cerr << "UnixSocket::Create bind: ";
+            throw;
+        }
 
-    // convert the socket listen for incoming connections
-    if (listen(server_, SOMAXCONN) < 0) {
-        perror("listen");
-        exit(-1);
+        // convert the socket listen for incoming connections
+        if (listen(server_, 10) < 0) {
+            std::cerr << "UnixSocket::Create listen: ";
+            throw;
+        }
+    } catch(...) {
+        closeSocket();
     }
 }
 
@@ -76,8 +78,15 @@ UnixSocket::serve() {
 
     while (1) {
         std::cout << "socket running" << std::endl;
-        if ((client = accept(server_, (struct sockaddr *)&client_addr, &clientlen)) > 0)
-            handle(client);
+        try {
+            if ((client = accept(server_, (struct sockaddr *)&client_addr, &clientlen)) > 0) {
+                handle(client);
+            } else {
+                throw;
+            }
+        } catch(...) {
+            closeSocket();
+        }
     }
     closeSocket();
 }
@@ -85,53 +94,62 @@ UnixSocket::serve() {
 void
 UnixSocket::handle(int client) {
     bool success;
-
-    if (getAck(client)) {
-        connectionNum_++;
-        success = sendResponse(client);
-        if (success) {
-            notifyServer();
+    SocketAck ack;
+    if ((ack.request = getRequest(client, ack)) != '\0') {
+        switch(ack.type) {
+            case SHARED_SOCKET:
+                connectionNum_++;
+                sendSocketName(client, ack);
+                break;
+            case SHARED_MEMORY:
+                break;
+            default:
+                break;
         }
     }
 }
 
 bool
-UnixSocket::getAck(int client) {
-    recv(client, &ack_, sizeof(&ack_), 0);
-    printf("return ack_ =%d\n", ack_);
-
-    if (ack_ == 0)
-      return true;
-    else
-      return false;
-}
-
-bool
-UnixSocket::sendResponse(int client) {
-    std::cout << "UnixScoket::sendResponse" << std::endl;
+UnixSocket::getRequest(int client, SocketAck &ack) {
+    std::cout << "UnixScoket::getRequest: " << std::endl;
     int cc;
-    std::string shmKey = KeyGenerator::createKey((char *)baseKey_, connectionNum_);
-    const char *sendBuf = shmKey.c_str();
-    std::cout << "bridgeKey: " << sendBuf << std::endl;
-
-    if ((cc = send(client, sendBuf, sizeof(sendBuf), 0)) < 0) {
-        perror("send");
-        return false;
-    } else {
+    if ((cc=recv(client, &ack, sizeof(ack), 0)) > 0) {
         return true;
+    } else {
+        return false;
     }
 }
 
 void
-UnixSocket::closeSocket() {
-    unlink(socketName_);
+UnixSocket::sendSocketName(int client, SocketAck &ack) {
+    std::cout << "UnixSocket::sendSocketName: " << std::endl;
+    int cc;
+    std::string socketName = KeyGenerator::createSocketName(BASE_SOCKET_NAME, connectionNum_);
+    strcpy(ack.data, socketName.c_str());
+
+    try {
+        if ((cc = send(client, &ack, sizeof(ack), 0)) < 0) {
+            std::cerr << "UnixSocket::sendSocketName";
+            throw;
+        } else {
+            notifyServer(socketName);
+        }
+    } catch(...) {
+        closeSocket();
+    }
+
 }
 
 void
-UnixSocket::notifyServer() {
-    std::string shmKey = KeyGenerator::createKey((char *)baseKey_, connectionNum_);
-    ISubject::notify(shmKey);
+UnixSocket::notifyServer(std::string socketName) {
+    ISubject::notify(socketName);
 }
 
-#endif
+void
+UnixSocket::closeSocket() {
+    std::cout << "UnixSocket::closeSocket()" << std::endl;
+    unlink(socketName_.c_str());
+}
+
+#endif  /* UNIX_SOCKET_H */
 

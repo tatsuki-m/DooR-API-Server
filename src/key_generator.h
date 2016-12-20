@@ -11,7 +11,8 @@ class KeyGenerator
 public:
     KeyGenerator();
     ~KeyGenerator();
-    static std::string createKey(char*, unsigned int);
+    //static std::string createKey(char*, unsigned int);
+    static std::string createSocketName(std::string, unsigned int);
 };
 
 #endif

@@ -16,7 +16,8 @@ int
 main() {
     // check main thread 
     std::cout << "main" << std::this_thread::get_id() << std::endl;
-/*
+
+
     // initialize socket & server instance
     UnixSocket socket = UnixSocket();
     DoorApiManager doorApiManager = DoorApiManager();
@@ -24,7 +25,6 @@ main() {
 
     // start server
     socket.run();
-*/
 
 /*
     std::string key = "hoge";
@@ -34,6 +34,7 @@ main() {
     sharedKey
 */
 
+/*
     std::string key = "hoge";
     char sharedData[16] = "hogehoge";
     SharedMemory<char, SharedKey>* sharedKeyMemory1 = new SharedMemory<char, SharedKey>(key);
@@ -44,6 +45,7 @@ main() {
 
     //delete[] sharedData;
     //delete sharedKeyMemory1;
+*/
 
 /*
     std::string key = "hoge";

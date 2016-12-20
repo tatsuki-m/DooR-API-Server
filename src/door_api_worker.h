@@ -27,7 +27,7 @@ class DoorApiWorker
     };
 
 public:
-    DoorApiWorker(std::string);
+    DoorApiWorker(unsigned int, std::string);
     ~DoorApiWorker();
 private:
     void run(std::string);
@@ -36,13 +36,13 @@ private:
 
     // variable for shared memory
     SharedMemoryBuffer *m_sharedMemoryBuffer;
-
+    char m_sharedMemoryName_[16];
+    unsigned int id_;
+    unsigned int instanceNum_;
     bool abort_;
     std::mutex mtx_;
     std::condition_variable cv_;
     std::thread th_;
-    char m_sharedMemoryName_[16];
-    unsigned int instanceNum_;
 };
 
 #endif

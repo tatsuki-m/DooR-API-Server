@@ -14,12 +14,14 @@
 
 #include "i_subject.h"
 #include "key_generator.h"
+#include "socket_ack.h"
 
 class UnixSocket : public ISubject
 {
 
 public:
     UnixSocket();
+    UnixSocket(std::string socketName, unsigned int workerID);
     ~UnixSocket();
     void run();
 
@@ -28,17 +30,13 @@ private:
     void closeSocket();
     void serve();
     void handle(int);
-    void registerHandler();
-    void notifyServer();
-    bool getAck(int);
-    bool sendResponse(int);
-    // static void interrupt(int);
-
+    void notifyServer(std::string);
+    void sendSocketName(int, SocketAck&);
+    bool getRequest(int, SocketAck&);
     int server_;
-    int ack_;
+    unsigned int workerID_;
     unsigned int connectionNum_;
-    static const char* socketName_;
-    static const char* baseKey_;
+    std::string socketName_;
 };
 
 
