@@ -18,6 +18,7 @@ public:
     void create(std::string);
 
 private:
+    unsigned int workerNum_;
     std::vector<DoorApiWorker*> p_doorApiWorkers;
 };
 

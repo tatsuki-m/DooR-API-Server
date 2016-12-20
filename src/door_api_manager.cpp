@@ -1,6 +1,7 @@
 #include "door_api_manager.h"
 
 DoorApiManager::DoorApiManager() {
+    workerNum_ = 0;
 }
 
 DoorApiManager::~DoorApiManager() {
@@ -8,17 +9,10 @@ DoorApiManager::~DoorApiManager() {
 }
 
 void
-DoorApiManager::create(std::string doorBaseShmKey) {
-    DoorApiWorker *worker = new DoorApiWorker(doorBaseShmKey);
+DoorApiManager::create(std::string socketName) {
+    std::cout << "DoorApiManger::create: generate worker" << std::endl;
+    workerNum_++;
+    DoorApiWorker *worker = new DoorApiWorker(workerNum_, socketName);
     p_doorApiWorkers.push_back(worker);
-
-    std::cout << "generate worker" << std::endl;
-    /*
-    while (true) {
-        std::cout << worker->m_sharedSt_.value << " " << worker->m_sharedSt_.valueFloat << std::endl;
-        sleep(1);
-    }
-    */
-    // delete worker;
 }
 
