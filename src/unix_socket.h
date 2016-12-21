@@ -35,7 +35,6 @@ private:
     void handle(int);
     void notifyServer(std::string);
     void sendSocketName(int, SocketAck&);
-    void sendDoorShmKey(int, SocketAck&);
     bool getRequest(int, SocketAck&);
     int server_;
     unsigned int workerID_;

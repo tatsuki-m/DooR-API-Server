@@ -1,24 +1,12 @@
 #include "unix_socket.h"
 
-std::string DOOR_BASE_SHM_KEY = "shmKey";
 std::string BASE_SOCKET_NAME = "/tmp/unix-socket";
-
 
 // default  use for SHARED_SOCKET
 UnixSocket::UnixSocket() {
     std::cout << "UnixSocket: " << std::this_thread::get_id() << std::endl;
     socketName_ = BASE_SOCKET_NAME;
     counter_ = 0;
-    workerID_ = 0;
-    unlink(socketName_.c_str());
-}
-
-// default userh for SHARED_MEMORY
-UnixSocket::UnixSocket(std::string socketName, unsigned int workerID) {
-    std::cout << "UnixSocket: " << std::this_thread::get_id() << std::endl;
-    socketName_ = socketName;
-    counter_ = 0;
-    workerID_ = workerID;
     unlink(socketName_.c_str());
 }
 
@@ -94,17 +82,13 @@ UnixSocket::serve() {
 
 void
 UnixSocket::handle(int client) {
-    bool success;
-    SocketAck ack;
-    if ((ack.request = getRequest(client, ack)) != '\0') {
+    bool is_success;
+    SocketAck ack;  /* ack.request a: ask socketName */
+    if (is_success = getRequest(client, ack)) {
         switch(ack.type) {
-            case SHARED_SOCKET:
+            case ASK_SOCKET:
                 counter_++;
                 sendSocketName(client, ack);
-                break;
-            case SHARED_MEMORY:
-                counter_++;
-                sendDoorShmKey(client, ack);
                 break;
             default:
                 break;
@@ -143,27 +127,9 @@ UnixSocket::sendSocketName(int client, SocketAck &ack) {
 
 }
 
-void 
-UnixSocket::sendDoorShmKey(int client, SocketAck &ack) {
-    std::cout << "UnixSocket::sendDoorSocketName" << std::endl;
-    int cc;
-    std::string doorShmKey = KeyGenerator::createDoorShmKey(DOOR_BASE_SHM_KEY, workerID_, counter_);
-    strcpy(ack.data, doorShmKey.c_str());
-
-    try {
-        if ((cc = send(client, &ack, sizeof(ack), 0)) < 0) {
-            std::cerr << "UnixSocket::sendSocketName";
-            throw;
-        } else {
-            std::cout << "success" << std::endl;
-        }
-    } catch(...) {
-        closeSocket();
-    }
-}
-
 void
 UnixSocket::notifyServer(std::string socketName) {
+    std::cout << "UnixSocket::notifyServer()" << std::endl;
     ISubject::notify(socketName);
 }
 
