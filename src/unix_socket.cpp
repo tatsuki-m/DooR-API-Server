@@ -1,7 +1,5 @@
-#ifndef UNIX_SOCKET_H_
-#define UNIX_SOCKET_H_
-
 #include "unix_socket.h"
+
 std::string DOOR_BASE_SHM_KEY = "shmKey";
 std::string BASE_SOCKET_NAME = "/tmp/unix-socket";
 
@@ -149,7 +147,7 @@ void
 UnixSocket::sendDoorShmKey(int client, SocketAck &ack) {
     std::cout << "UnixSocket::sendDoorSocketName" << std::endl;
     int cc;
-    std::string doorShmKey = KeyGenerator::createDoorShmKey(DOOR_BASE_SHM_KEY, workerID, counter_);
+    std::string doorShmKey = KeyGenerator::createDoorShmKey(DOOR_BASE_SHM_KEY, workerID_, counter_);
     strcpy(ack.data, doorShmKey.c_str());
 
     try {
@@ -174,6 +172,4 @@ UnixSocket::closeSocket() {
     std::cout << "UnixSocket::closeSocket()" << std::endl;
     unlink(socketName_.c_str());
 }
-
-#endif  /* UNIX_SOCKET_H */
 

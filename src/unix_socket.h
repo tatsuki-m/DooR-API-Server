@@ -1,3 +1,6 @@
+//#ifdef UNIX_SOCKET_H_
+//#define UNIX_SOCKET_H_
+
 #include <iostream>
 #include <errno.h>
 #include <netdb.h>
@@ -32,6 +35,7 @@ private:
     void handle(int);
     void notifyServer(std::string);
     void sendSocketName(int, SocketAck&);
+    void sendDoorShmKey(int, SocketAck&);
     bool getRequest(int, SocketAck&);
     int server_;
     unsigned int workerID_;
@@ -39,4 +43,5 @@ private:
     std::string socketName_;
 };
 
+//#endif
 

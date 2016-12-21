@@ -6,10 +6,12 @@
 #include "door_api_manager.h"
 #include "worker.h"
 
+/*
 #include "door_shared_memory/shared_key.h"
 #include "door_shared_memory/shared_memory.h"
 #include "door_shared_memory/shared_packet_information.h"
 #include "door_shared_memory/dpi.h"
+*/
 
 
 int
