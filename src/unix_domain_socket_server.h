@@ -1,5 +1,5 @@
-//#ifdef UNIX_SOCKET_H_
-//#define UNIX_SOCKET_H_
+//#ifdef UNIX_DOMAIN_SOCKET_SERVER_H_
+//#define UNIX_DOMAIN_SOCKET_SERVER_H_
 
 #include <iostream>
 #include <errno.h>
@@ -19,12 +19,12 @@
 #include "key_generator.h"
 #include "socket_ack.h"
 
-class UnixSocket : public ISubject
+class UnixDomainSocketServer : public ISubject
 {
 
 public:
-    UnixSocket();
-    ~UnixSocket();
+    UnixDomainSocketServer();
+    ~UnixDomainSocketServer();
     void run();
 
 private:

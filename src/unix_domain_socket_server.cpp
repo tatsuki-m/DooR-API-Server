@@ -1,27 +1,27 @@
-#include "unix_socket.h"
+#include "unix_domain_socket_server.h"
 
 std::string BASE_SOCKET_NAME = "/tmp/unix-socket";
 
 // default  use for SHARED_SOCKET
-UnixSocket::UnixSocket() {
-    std::cout << "UnixSocket: " << std::this_thread::get_id() << std::endl;
+UnixDomainSocketServer::UnixDomainSocketServer() {
+    std::cout << "UnisDomainSocketServer: " << std::this_thread::get_id() << std::endl;
     socketName_ = BASE_SOCKET_NAME;
     counter_ = 0;
     unlink(socketName_.c_str());
 }
 
-UnixSocket::~UnixSocket() {
+UnixDomainSocketServer::~UnixDomainSocketServer() {
     closeSocket();
 }
 
 void
-UnixSocket::run() {
+UnixDomainSocketServer::run() {
     create();
     serve();
 }
 
 void
-UnixSocket::create() {
+UnixDomainSocketServer::create() {
     try {
         struct sockaddr_un server_addr;
         int soval = 1;
@@ -34,24 +34,24 @@ UnixSocket::create() {
         // create socket
         server_ = socket(AF_UNIX, SOCK_STREAM, 0);
         if (!server_) {
-            std::cerr << "UnixSocket::Create socket: ";
+            std::cerr << "UnisDomainSocketServer::Create socket: ";
             throw;
         }
 
         if (setsockopt(server_, SOL_SOCKET, SO_REUSEADDR, &soval, sizeof(soval)) == -1 ) {
-            std::cerr << "UnixSocket::Create setsockopt: ";
+            std::cerr << "UnisDomainSocketServer::Create setsockopt: ";
             throw;
         }
 
         // call bind to associate the socket with the UNIX file system
         if (bind(server_, (const struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
-            std::cerr << "UnixSocket::Create bind: ";
+            std::cerr << "UnisDomainSocketServer::Create bind: ";
             throw;
         }
 
         // convert the socket listen for incoming connections
         if (listen(server_, 10) < 0) {
-            std::cerr << "UnixSocket::Create listen: ";
+            std::cerr << "UnisDomainSocketServer::Create listen: ";
             throw;
         }
     } catch(...) {
@@ -60,7 +60,7 @@ UnixSocket::create() {
 }
 
 void
-UnixSocket::serve() {
+UnixDomainSocketServer::serve() {
     int client;
     struct sockaddr_in client_addr;
     socklen_t clientlen = sizeof(client_addr);
@@ -81,7 +81,7 @@ UnixSocket::serve() {
 }
 
 void
-UnixSocket::handle(int client) {
+UnixDomainSocketServer::handle(int client) {
     bool is_success;
     SocketAck ack;  /* ack.request a: ask socketName */
     if (is_success = getRequest(client, ack)) {
@@ -97,7 +97,7 @@ UnixSocket::handle(int client) {
 }
 
 bool
-UnixSocket::getRequest(int client, SocketAck &ack) {
+UnixDomainSocketServer::getRequest(int client, SocketAck &ack) {
     std::cout << "UnixScoket::getRequest: " << std::endl;
     int cc;
     if ((cc=recv(client, &ack, sizeof(ack), 0)) > 0) {
@@ -108,15 +108,15 @@ UnixSocket::getRequest(int client, SocketAck &ack) {
 }
 
 void
-UnixSocket::sendSocketName(int client, SocketAck &ack) {
-    std::cout << "UnixSocket::sendSocketName: " << std::endl;
+UnixDomainSocketServer::sendSocketName(int client, SocketAck &ack) {
+    std::cout << "UnisDomainSocketServer::sendSocketName: " << std::endl;
     int cc;
     std::string socketName = KeyGenerator::createSocketName(BASE_SOCKET_NAME, counter_);
     strcpy(ack.data, socketName.c_str());
 
     try {
         if ((cc = send(client, &ack, sizeof(ack), 0)) < 0) {
-            std::cerr << "UnixSocket::sendSocketName";
+            std::cerr << "UnisDomainSocketServer::sendSocketName";
             throw;
         } else {
             notifyServer(socketName);
@@ -128,14 +128,14 @@ UnixSocket::sendSocketName(int client, SocketAck &ack) {
 }
 
 void
-UnixSocket::notifyServer(std::string socketName) {
-    std::cout << "UnixSocket::notifyServer()" << std::endl;
+UnixDomainSocketServer::notifyServer(std::string socketName) {
+    std::cout << "UnisDomainSocketServer::notifyServer()" << std::endl;
     ISubject::notify(socketName);
 }
 
 void
-UnixSocket::closeSocket() {
-    std::cout << "UnixSocket::closeSocket()" << std::endl;
+UnixDomainSocketServer::closeSocket() {
+    std::cout << "UnisDomainSocketServer::closeSocket()" << std::endl;
     unlink(socketName_.c_str());
 }
 
