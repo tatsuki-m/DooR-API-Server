@@ -1,5 +1,5 @@
-//#ifdef UNIX_SOCKET_H_
-//#define UNIX_SOCKET_H_
+//#ifdef WORKER_UNIX_DOMAIN_SOCKET_SERVER_H_
+//#define WORKER_UNIX_DOMAIN_SOCKET_SERVER_H_
 
 #include <iostream>
 #include <errno.h>
@@ -15,16 +15,15 @@
 #include <string>
 #include <thread>
 
-#include "i_subject.h"
 #include "key_generator.h"
 #include "socket_ack.h"
 
-class UnixSocket : public ISubject
+class WorkerUnixDomainSocketServer
 {
 
 public:
-    UnixSocket();
-    ~UnixSocket();
+    WorkerUnixDomainSocketServer(std::string, unsigned int);
+    ~WorkerUnixDomainSocketServer();
     void run();
 
 private:
@@ -32,10 +31,10 @@ private:
     void closeSocket();
     void serve();
     void handle(int);
-    void notifyServer(std::string);
-    void sendSocketName(int, SocketAck&);
+    void sendDoorShmKey(int, SocketAck&);
     bool getRequest(int, SocketAck&);
     int server_;
+    unsigned int workerID_;
     unsigned int counter_;
     std::string socketName_;
 };
