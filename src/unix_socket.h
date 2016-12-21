@@ -35,7 +35,7 @@ private:
     bool getRequest(int, SocketAck&);
     int server_;
     unsigned int workerID_;
-    unsigned int connectionNum_;
+    unsigned int counter_;
     std::string socketName_;
 };
 

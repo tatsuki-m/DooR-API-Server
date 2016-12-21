@@ -5,18 +5,21 @@
 std::string DOOR_BASE_SHM_KEY = "shmKey";
 std::string BASE_SOCKET_NAME = "/tmp/unix-socket";
 
+
+// default  use for SHARED_SOCKET
 UnixSocket::UnixSocket() {
     std::cout << "UnixSocket: " << std::this_thread::get_id() << std::endl;
     socketName_ = BASE_SOCKET_NAME;
-    connectionNum_ = 0;
+    counter_ = 0;
     workerID_ = 0;
     unlink(socketName_.c_str());
 }
 
+// default userh for SHARED_MEMORY
 UnixSocket::UnixSocket(std::string socketName, unsigned int workerID) {
     std::cout << "UnixSocket: " << std::this_thread::get_id() << std::endl;
     socketName_ = socketName;
-    connectionNum_ = 0;
+    counter_ = 0;
     workerID_ = workerID;
     unlink(socketName_.c_str());
 }
@@ -98,10 +101,12 @@ UnixSocket::handle(int client) {
     if ((ack.request = getRequest(client, ack)) != '\0') {
         switch(ack.type) {
             case SHARED_SOCKET:
-                connectionNum_++;
+                counter_++;
                 sendSocketName(client, ack);
                 break;
             case SHARED_MEMORY:
+                counter_++;
+                sendDoorShmKey(client, ack);
                 break;
             default:
                 break;
@@ -124,7 +129,7 @@ void
 UnixSocket::sendSocketName(int client, SocketAck &ack) {
     std::cout << "UnixSocket::sendSocketName: " << std::endl;
     int cc;
-    std::string socketName = KeyGenerator::createSocketName(BASE_SOCKET_NAME, connectionNum_);
+    std::string socketName = KeyGenerator::createSocketName(BASE_SOCKET_NAME, counter_);
     strcpy(ack.data, socketName.c_str());
 
     try {
@@ -138,6 +143,25 @@ UnixSocket::sendSocketName(int client, SocketAck &ack) {
         closeSocket();
     }
 
+}
+
+void 
+UnixSocket::sendDoorShmKey(int client, SocketAck &ack) {
+    std::cout << "UnixSocket::sendDoorSocketName" << std::endl;
+    int cc;
+    std::string doorShmKey = KeyGenerator::createDoorShmKey(DOOR_BASE_SHM_KEY, workerID, counter_);
+    strcpy(ack.data, doorShmKey.c_str());
+
+    try {
+        if ((cc = send(client, &ack, sizeof(ack), 0)) < 0) {
+            std::cerr << "UnixSocket::sendSocketName";
+            throw;
+        } else {
+            std::cout << "success" << std::endl;
+        }
+    } catch(...) {
+        closeSocket();
+    }
 }
 
 void
