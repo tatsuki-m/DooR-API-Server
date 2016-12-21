@@ -9,7 +9,7 @@
 //#include <chrono>
 
 #include "key_generator.h"
-//#include "unix_socket.h"
+#include "worker_unix_domain_socket_server.h"
 
 class DoorApiWorker
 {
