@@ -15,10 +15,10 @@ DoorApiWorker::run(std::string socketName) {
     std::cout << "+ Woker::run" << std::endl;
 
     socketName_ =  socketName.c_str();
-    UnixSocket socket = UnixSocket(socketName_, id_);
+    //UnixSocket socket = UnixSocket(socketName_, id_);
     // workerのでsocketの情報を参照することがない, 現行の実装ではスレッドセーフ
     // 今後そのようなことがあれば、スレッドセーフにする必要がある
-    socket.run();
+    //socket.run();
 
     std::cout << "-Worker::run" << std::endl;
 }
