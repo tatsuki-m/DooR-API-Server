@@ -4,7 +4,8 @@ std::string BASE_SHM_KEY = "ShmKey";
 
 WorkerUnixDomainSocketServer::WorkerUnixDomainSocketServer(std::string socketName, unsigned int workerID) {
     std::cout << "WorkerUnixDomainSocketServer: " << std::this_thread::get_id() << std::endl;
-    socketName_ = socketName_;
+    socketName_ = socketName;
+    std::cout << "WorkerUnixDomainSocketServer SocketName: " << socketName_ << std::endl;
     workerID_ = workerID;
     counter_ = 0;
     unlink(socketName_.c_str());

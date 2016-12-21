@@ -14,7 +14,10 @@ DoorApiWorker::run(std::string socketName) {
     std::cout << "DoorApiWorker::run: " << std::this_thread::get_id() << std::endl;
     std::cout << "+ Woker::run" << std::endl;
 
+
+    std::cout << "===========socketName===========" << socketName << std::endl;
     socketName_ =  socketName.c_str();
+    std::cout << "===========socketName_===========" <<socketName_ << std::endl;
     WorkerUnixDomainSocketServer socket = WorkerUnixDomainSocketServer(socketName_, id_);
     // workerのでsocketの情報を参照することがない, 現行の実装ではスレッドセーフ
     // 今後そのようなことがあれば、スレッドセーフにする必要がある
