@@ -1,6 +1,7 @@
-#ifndef SERVER_H_
-#include <string>
+//#ifdef I_SUBJECT_H_
+//#define I_SUBJECT_H_
 
+#include <string>
 #include "door_api_manager.h"
 
 class ISubject
@@ -16,5 +17,5 @@ private:
     DoorApiManager* doorApiManager_;
 };
 
-#endif
+//#endif
 

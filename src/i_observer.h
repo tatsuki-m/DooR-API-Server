@@ -1,4 +1,4 @@
-#ifndef I_OBSERVER__H_
+#ifndef I_OBSERVER_H_
 #define I_OBSERVER_H_
 
 #include <string>

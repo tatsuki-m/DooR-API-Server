@@ -1,38 +1,29 @@
 #include "door_api_worker.h"
 
-DoorApiWorker::DoorApiWorker(unsigned int workerID, std::string sharedMemoryName)
-    : abort_(false), instanceNum_(0), id_(workerID), th_(&DoorApiWorker::run, this, sharedMemoryName) {
+DoorApiWorker::DoorApiWorker(unsigned int workerID, std::string socketName)
+    : abort_(false), instanceNum_(0), id_(workerID), th_(&DoorApiWorker::run, this, socketName) {
 }
 
 DoorApiWorker::~DoorApiWorker() {
-    if (m_sharedMemoryBuffer != NULL) {
-        shared_memory_object::remove(m_sharedMemoryName_);
-        delete m_sharedMemoryBuffer;
-    }
+    std::cout << "DoorApiWorker::~DoorApiWorker" << std::endl;
+    th_.join();
 }
 
 void
-DoorApiWorker::run(std::string sharedMemoryName) {
+DoorApiWorker::run(std::string socketName) {
     std::cout << "DoorApiWorker::run: " << std::this_thread::get_id() << std::endl;
     std::cout << "+ Woker::run" << std::endl;
 
-    // initialize attribute
-    strcpy(m_sharedMemoryName_, sharedMemoryName.c_str());
-    writeSharedMemory();
-    // write key to shared memory
+    socketName_ =  socketName.c_str();
+    WorkerUnixDomainSocketServer socket = WorkerUnixDomainSocketServer(socketName_, id_);
+    // workerのでsocketの情報を参照することがない, 現行の実装ではスレッドセーフ
+    // 今後そのようなことがあれば、スレッドセーフにする必要がある
+    socket.run();
 
-    while (true) {
-        std::unique_lock<std::mutex> lock(mtx_);
-        auto sleep_time = std::chrono::seconds(1);
-        if (abort_) {
-            std::cout << "aborted" << std::endl;
-            break;
-        };
-        cv_.wait_for(lock, sleep_time, [this] { return abort_; });
-    }
     std::cout << "-Worker::run" << std::endl;
 }
 
+/*
 bool
 DoorApiWorker::writeSharedMemory() {
     std::cout << "DoorApiWorker::writeSharedMemory()" << std::endl;
@@ -61,4 +52,5 @@ DoorApiWorker::writeSharedMemory() {
     }
     return true;
 }
+*/
 

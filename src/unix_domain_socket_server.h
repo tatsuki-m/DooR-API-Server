@@ -1,3 +1,6 @@
+//#ifdef UNIX_DOMAIN_SOCKET_SERVER_H_
+//#define UNIX_DOMAIN_SOCKET_SERVER_H_
+
 #include <iostream>
 #include <errno.h>
 #include <netdb.h>
@@ -16,13 +19,12 @@
 #include "key_generator.h"
 #include "socket_ack.h"
 
-class UnixSocket : public ISubject
+class UnixDomainSocketServer : public ISubject
 {
 
 public:
-    UnixSocket();
-    UnixSocket(std::string socketName, unsigned int workerID);
-    ~UnixSocket();
+    UnixDomainSocketServer();
+    ~UnixDomainSocketServer();
     void run();
 
 private:
@@ -34,9 +36,9 @@ private:
     void sendSocketName(int, SocketAck&);
     bool getRequest(int, SocketAck&);
     int server_;
-    unsigned int workerID_;
-    unsigned int connectionNum_;
+    unsigned int counter_;
     std::string socketName_;
 };
 
+//#endif
 
