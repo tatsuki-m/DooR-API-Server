@@ -113,6 +113,9 @@ UnixDomainSocketServer::sendSocketName(int client, SocketAck &ack) {
     int cc;
     std::string socketName = KeyGenerator::createSocketName(BASE_SOCKET_NAME, counter_);
     strcpy(ack.data, socketName.c_str());
+    std::cout << "socket Name: ack.data =  " << ack.data << std::endl;
+    std::cout << "socket Name: socketName = " << socketName << std::endl;
+    std::cout << "socket Name: socketName.c_str() = " << socketName.c_str() << std::endl;
 
     try {
         if ((cc = send(client, &ack, sizeof(ack), 0)) < 0) {

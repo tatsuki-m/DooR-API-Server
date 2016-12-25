@@ -84,7 +84,7 @@ WorkerUnixDomainSocketServer::serve() {
 void
 WorkerUnixDomainSocketServer::handle(int client) {
     bool is_success;
-    SocketAck ack;  /* ack.request a: ask socketName */
+    SocketAck ack;
     if (is_success = getRequest(client, ack)) {
         switch(ack.type) {
             case ASK_SHM:

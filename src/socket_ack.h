@@ -7,8 +7,8 @@ enum SocketType {
 };
 
 struct SocketAck {
-    char data[64] = {'\0'};
     SocketType type;
+    char data[64] = {'\0'};
 };
 
 #endif
