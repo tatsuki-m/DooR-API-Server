@@ -18,11 +18,11 @@ public:
     unsigned int id_;
     // using timestamp
     // struct tm timestamp_;
-    //char srcIp_[10];
-    //char dstIp_[10];
+    //char srcIp_[64];
+    //char dstIp_[64];
     unsigned int srcPort_;
     unsigned int dstPort_;
-    //char data_[1000];
+    //char data_[256];
 };
 
 #endif  //DPI_H_
