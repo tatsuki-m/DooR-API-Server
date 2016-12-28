@@ -25,9 +25,16 @@ include_directories("${shared_memory_SOURCE_DIR}/src")
 # add library path for door_shared_memory
 set(CMAKE_LIBRARY_PATH "${door_shared_memory_BINNARY_DIR}" ${CMAKE_LIBRARY_PATH})
 
+# add door shared door_api 
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/src/door_api")
+# add includes for door_shared_memory
+include_directories("${door_api_SOURCE_DIR}/src")
+# add library path for door_shared_memory
+set(CMAKE_LIBRARY_PATH "${door_api_BINNARY_DIR}" ${CMAKE_LIBRARY_PATH})
 
 # select executable file
 # add_executable(<exe-file>, files)
 add_executable(DooR-API-Server ${APISrcs})
 target_link_libraries(DooR-API-Server door_shared_memory)
+target_link_libraries(DooR-API-Server door_api)
 
