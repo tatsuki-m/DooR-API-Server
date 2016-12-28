@@ -18,11 +18,11 @@ public:
     SharedMemory(std::string);
     ~SharedMemory();
     bool write(T*);
-    void read(T**);
+    bool read(T**);
     T* sharedData_;
     U* m_sharedMemoryBuffer_;
 private:
-    const char* m_sharedMemoryName_;
+    std::string sharedMemoryName_;
 };
 
 

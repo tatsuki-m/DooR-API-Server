@@ -1,5 +1,7 @@
 #include "shared_packet_information.h"
 
+// writer is initialzer to write data to shm
+// but, reader plays a role to provide memroy data
 SharedPacketInformation::SharedPacketInformation(): writer_(1), reader_(0) {
 };
 
