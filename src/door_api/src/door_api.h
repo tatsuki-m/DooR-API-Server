@@ -13,7 +13,7 @@ class DoorApi
 public:
     DoorApi();
     ~DoorApi();
-    bool getAllInformation(std::string, std::string);
+    void getAllInformation(std::string, std::string);
 private:
 };
 

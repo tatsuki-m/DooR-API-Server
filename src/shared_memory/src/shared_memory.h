@@ -17,7 +17,7 @@ class SharedMemory
 public:
     SharedMemory(std::string);
     ~SharedMemory();
-    bool write(T*);
+    void write(T*);
     bool read(T**);
     T* sharedData_;
     U* m_sharedMemoryBuffer_;

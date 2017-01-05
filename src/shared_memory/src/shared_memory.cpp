@@ -11,7 +11,7 @@ SharedMemory<T, U>::~SharedMemory() {
 }
 
 template <class T, class U>
-bool
+void
 SharedMemory<T, U>::write(T* sharedData) {
 /*
     std::cout << "SharedMemory::write()" << std::endl;
@@ -28,17 +28,13 @@ SharedMemory<T, U>::write(T* sharedData) {
     m_sharedMemoryBuffer_ = new (addr) U;
 
     try {
-        while(true) {
-            m_sharedMemoryBuffer_->writer_.wait();
-                std::cout << "start writing" << std::endl;
-                m_sharedMemoryBuffer_->writeDataToShm(sharedData);
-            m_sharedMemoryBuffer_->reader_.post();
-         }
+          m_sharedMemoryBuffer_->writer_.wait();
+              std::cout << "start writing" << std::endl;
+              m_sharedMemoryBuffer_->writeDataToShm(sharedData);
+          m_sharedMemoryBuffer_->reader_.post();
     } catch (interprocess_exception& e) {
         std::cout << e.what() << std::endl;
-        return false;
    }
-    return true;
 }
 
 template <class T, class U>
@@ -59,14 +55,12 @@ SharedMemory<T, U>::read(T** sharedData) {
     m_sharedMemoryBuffer_ = static_cast<U*>(addr);
 
     try {
-        //while(true) {
-            m_sharedMemoryBuffer_->reader_.wait();
-                std::cout << "start reading" << std::endl;
-                *sharedData = new T;
-                m_sharedMemoryBuffer_->readDataFromShm(*sharedData);
-                std::cout << "SharedMemory::read sharedData: " << (*sharedData)->id_ << std::endl;
-            m_sharedMemoryBuffer_->writer_.post();
-       // }
+          m_sharedMemoryBuffer_->reader_.wait();
+              std::cout << "start reading" << std::endl;
+              *sharedData = new T;
+              m_sharedMemoryBuffer_->readDataFromShm(*sharedData);
+              std::cout << "SharedMemory::read sharedData: " << (*sharedData)->id_ << std::endl;
+          m_sharedMemoryBuffer_->writer_.post();
     } catch (interprocess_exception& e) {
         std::cout << e.what() << std::endl;
         return false;
