@@ -19,7 +19,7 @@ public:
 
 private:
     unsigned int workerNum_;
-    std::vector<DoorApiWorker*> p_doorApiWorkers;
+    std::vector<DoorApiWorker*> doorApiWorkers;
 };
 
 #endif
