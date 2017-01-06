@@ -1,5 +1,7 @@
 #include "door_api.h"
 
+std::string DOOR_BASE_SOCKET_NAME = "/tmp/unix-socket-door";
+
 DoorApi::DoorApi() {
 }
 
@@ -7,16 +9,15 @@ DoorApi::~DoorApi() {
 }
 
 void
-DoorApi::getAllInformation(std::string shmKey, std::string keyword) {
-    SharedMemory<Dpi, SharedPacketInformation> doorShm = SharedMemory<Dpi, SharedPacketInformation>(shmKey);
-    // create stub door data
-    unsigned int id = 100;
-    unsigned int srcPort = 1;
-    unsigned int dstPort = 1;
-    Dpi dpi = Dpi(id, srcPort, dstPort);
-    std::cout << "DoorApi::getAllInformation dpi writing" << std::endl;
-    doorShm.write(&dpi);
+DoorApi::callDoorWithSem(std::string shmKey, std::string keyword) {
+    SocketType type = ASK_DOOR;
+    UnixDomainSocketClient socket = UnixDomainSocketClient(DOOR_BASE_SOCKET_NAME, type, shmKey);
+    socket.run();
+
+/*
+    SharedMemory<Dpi, SharedPacketInformation>* doorShm = new SharedMemory<Dpi, SharedPacketInformation>(shmKey);
+    Dpi *dpi;
+    doorShm->read(&dpi);
+*/
 }
-
-
 
