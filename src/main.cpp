@@ -13,12 +13,14 @@
 
 int
 main() {
-    // check main thread 
+
+ 
     std::cout << "main" << std::this_thread::get_id() << std::endl;
+/*
     DoorApi doorApi = DoorApi();
     doorApi.getAllInformation("hoge", "hoge");
+*/
 
-/*
     // initialize socket & server instance
     UnixDomainSocketServer socket = UnixDomainSocketServer();
     DoorApiManager doorApiManager = DoorApiManager();
@@ -26,7 +28,6 @@ main() {
 
     // start server
     socket.run();
-*/
 
 /*
     std::string key = "hoge";
