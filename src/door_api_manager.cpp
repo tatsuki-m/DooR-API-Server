@@ -14,6 +14,6 @@ DoorApiManager::create(std::string socketName) {
     std::cout << "SocketName: " << socketName << std::endl;
     workerNum_++;
     DoorApiWorker *worker = new DoorApiWorker(workerNum_, socketName);
-    p_doorApiWorkers.push_back(worker);
+    doorApiWorkers.push_back(worker);
 }
 
