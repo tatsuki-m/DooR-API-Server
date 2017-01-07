@@ -1,0 +1,7 @@
+/usr/local/lib/libdoor_unix_domain_socket_client.so.1.0.0
+/usr/local/lib/libdoor_unix_domain_socket_client.so.1
+/usr/local/lib/libdoor_unix_domain_socket_client.so
+/usr/local/include/door_unix_domain_socket_client/socket_ack.h
+/usr/local/include/door_unix_domain_socket_client/unix_domain_socket_client.h
+/usr/local/share/cmake/door_unix_domain_socket_client/door_unix_domain_socket_client-config.cmake
+/usr/local/share/cmake/door_unix_domain_socket_client/door_unix_domain_socket_client-config-release.cmake
