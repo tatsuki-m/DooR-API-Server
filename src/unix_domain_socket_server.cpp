@@ -1,6 +1,6 @@
 #include "unix_domain_socket_server.h"
 
-std::string BASE_SOCKET_NAME = "/tmp/unix-socket";
+std::string BASE_SOCKET_NAME = "/tmp/unix-socket/unix-socket";
 
 // default  use for SHARED_SOCKET
 UnixDomainSocketServer::UnixDomainSocketServer() {
