@@ -8,13 +8,10 @@
 #include "door_shared_memory/shared_memory.h"
 #include "door_shared_memory/shared_packet_information.h"
 #include "door_shared_memory/dpi.h"
-
 #include "door_api/door_api.h"
 
 int
 main() {
-
- 
     std::cout << "main" << std::this_thread::get_id() << std::endl;
 /*
     DoorApi doorApi = DoorApi();

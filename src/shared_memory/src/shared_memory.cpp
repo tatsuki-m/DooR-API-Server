@@ -1,5 +1,7 @@
 #include "shared_memory.h"
 
+const int MAX_COUNT = 1000;
+
 template <class T, class U>
 SharedMemory<T, U>::SharedMemory(std::string sharedMemoryName) {
     sharedMemoryName_ = sharedMemoryName.c_str();
@@ -25,7 +27,7 @@ SharedMemory<T, U>::write(T* sharedData) {
       std::cout << "==========================" << std::endl;
       std::cout << "start writing" << std::endl;
       std::cout << "==========================" <<  std::endl;
-       while(counter<1000) {
+       while(counter<MAX_COUNT) {
           m_sharedMemoryBuffer_->writer_.wait();
               m_sharedMemoryBuffer_->writeDataToShm(sharedData);
               counter++;
@@ -43,6 +45,7 @@ SharedMemory<T, U>::write(T* sharedData) {
 template <class T, class U>
 bool
 SharedMemory<T, U>::read(T** sharedData) {
+    int counter = 0;
     std::cout << "SharedMemory::read()" << std::endl;
     shared_memory_object shm(open_or_create, sharedMemoryName_.c_str(), read_write);
     mapped_region region(shm, read_write);
@@ -53,10 +56,11 @@ SharedMemory<T, U>::read(T** sharedData) {
       std::cout << "==========================" << std::endl;
       std::cout << "start reading" << std::endl;
       std::cout << "==========================" <<  std::endl;
-      while(true) {
+      while(counter<MAX_COUNT) {
           m_sharedMemoryBuffer_->reader_.wait();
               *sharedData = new T;
               m_sharedMemoryBuffer_->readDataFromShm(*sharedData);
+              counter++;
               std::cout << "SharedMemory::read sharedData: " << (*sharedData)->id_ << std::endl;
           m_sharedMemoryBuffer_->writer_.post();
       }
