@@ -6,6 +6,8 @@ DoorApiManager::DoorApiManager() {
 
 DoorApiManager::~DoorApiManager() {
     // delete door worker api
+    std::for_each(doorApiWorkers.begin(), doorApiWorkers.end(), [](DoorApiWorker* p) { delete p; });
+    doorApiWorkers.clear();
 }
 
 void
