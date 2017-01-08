@@ -26,7 +26,6 @@ public:
     UnixDomainSocketServer();
     ~UnixDomainSocketServer();
     void run();
-//    static void notifySignal();
 private:
     void create();
     void serve();
