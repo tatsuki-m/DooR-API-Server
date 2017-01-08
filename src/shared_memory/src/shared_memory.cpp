@@ -13,6 +13,7 @@ SharedMemory<T, U>::~SharedMemory() {
 template <class T, class U>
 void
 SharedMemory<T, U>::write(T* sharedData) {
+    int counter = 0;
     std::cout << "SharedMemory::write()" << std::endl;
     shared_memory_object shm(open_or_create, sharedMemoryName_.c_str(), read_write);
     shm.truncate(sizeof(U)+U::getSharedDataSize());
@@ -21,12 +22,19 @@ SharedMemory<T, U>::write(T* sharedData) {
     m_sharedMemoryBuffer_ = new (addr) U;
 
     try {
-       while(true) {
+      std::cout << "==========================" << std::endl;
+      std::cout << "start writing" << std::endl;
+      std::cout << "==========================" <<  std::endl;
+       while(counter<1000) {
           m_sharedMemoryBuffer_->writer_.wait();
-              std::cout << "start writing" << std::endl;
               m_sharedMemoryBuffer_->writeDataToShm(sharedData);
+              counter++;
+              std::cout << "counter: " << counter << std::endl;
           m_sharedMemoryBuffer_->reader_.post();
        }
+      std::cout << "==========================" << std::endl;
+      std::cout << "finish writing" << std::endl;
+      std::cout << "==========================" << std::endl;
     } catch (interprocess_exception& e) {
         std::cout << e.what() << std::endl;
    }
@@ -42,14 +50,19 @@ SharedMemory<T, U>::read(T** sharedData) {
     m_sharedMemoryBuffer_ = static_cast<U*>(addr);
 
     try {
+      std::cout << "==========================" << std::endl;
+      std::cout << "start reading" << std::endl;
+      std::cout << "==========================" <<  std::endl;
       while(true) {
           m_sharedMemoryBuffer_->reader_.wait();
-              std::cout << "start reading" << std::endl;
               *sharedData = new T;
               m_sharedMemoryBuffer_->readDataFromShm(*sharedData);
               std::cout << "SharedMemory::read sharedData: " << (*sharedData)->id_ << std::endl;
           m_sharedMemoryBuffer_->writer_.post();
       }
+      std::cout << "==========================" << std::endl;
+      std::cout << "finish reading" << std::endl;
+      std::cout << "==========================" <<  std::endl;
     } catch (interprocess_exception& e) {
         std::cout << e.what() << std::endl;
         return false;
