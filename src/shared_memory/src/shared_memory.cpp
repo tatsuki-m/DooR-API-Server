@@ -13,13 +13,6 @@ SharedMemory<T, U>::~SharedMemory() {
 template <class T, class U>
 void
 SharedMemory<T, U>::write(T* sharedData) {
-/*
-    std::cout << "SharedMemory::write()" << std::endl;
-    shared_memory_object shm(open_or_create, sharedMemoryName_.c_str(), read_write);
-    mapped_region region(shm, read_write);
-    void *addr = region.get_address();
-    m_sharedMemoryBuffer_ = static_cast<U*>(addr);
-*/
     std::cout << "SharedMemory::write()" << std::endl;
     shared_memory_object shm(open_or_create, sharedMemoryName_.c_str(), read_write);
     shm.truncate(sizeof(U)+U::getSharedDataSize());
@@ -42,14 +35,6 @@ SharedMemory<T, U>::write(T* sharedData) {
 template <class T, class U>
 bool
 SharedMemory<T, U>::read(T** sharedData) {
-/*
-    std::cout << "SharedMemory::read()" << std::endl;
-    shared_memory_object shm(open_or_create, sharedMemoryName_.c_str(), read_write);
-    shm.truncate(sizeof(U)+U::getSharedDataSize());
-    mapped_region region(shm, read_write);
-    void *addr = region.get_address();
-    m_sharedMemoryBuffer_ = new (addr) U;
-*/
     std::cout << "SharedMemory::read()" << std::endl;
     shared_memory_object shm(open_or_create, sharedMemoryName_.c_str(), read_write);
     mapped_region region(shm, read_write);
