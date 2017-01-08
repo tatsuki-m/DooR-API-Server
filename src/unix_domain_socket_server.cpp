@@ -2,6 +2,14 @@
 
 std::string BASE_SOCKET_NAME = "/tmp/unix-socket/unix-socket";
 
+void
+signalHandler(int sigNum) {
+    std::cout << "Interrupt signal (" << sigNum << ") received." << std::endl;
+    unlink(BASE_SOCKET_NAME.c_str());
+    std::cout << "Going to sleep.." <<std::endl;
+    exit(sigNum);
+}
+
 // default  use for SHARED_SOCKET
 UnixDomainSocketServer::UnixDomainSocketServer() {
     std::cout << "UnisDomainSocketServer: " << std::this_thread::get_id() << std::endl;
@@ -16,6 +24,7 @@ UnixDomainSocketServer::~UnixDomainSocketServer() {
 
 void
 UnixDomainSocketServer::run() {
+    signal(SIGINT, signalHandler);
     create();
     serve();
 }
