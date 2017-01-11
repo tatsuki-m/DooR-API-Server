@@ -12,10 +12,14 @@ SharedMemory<T, U>::~SharedMemory() {
     // TODO: check shared memory is already deleted
 }
 
+
 template <class T, class U>
 void
 SharedMemory<T, U>::write(T* sharedData) {
     int counter = 0;
+    std::ofstream ofs("Test.csv");
+    struct timeval startTime;
+    struct timeval endTime;
     std::cout << "SharedMemory::write()" << std::endl;
     shared_memory_object shm(open_or_create, sharedMemoryName_.c_str(), read_write);
     shm.truncate(sizeof(U)+U::getSharedDataSize());
@@ -28,11 +32,15 @@ SharedMemory<T, U>::write(T* sharedData) {
       std::cout << "start writing" << std::endl;
       std::cout << "==========================" <<  std::endl;
        while(counter<MAX_COUNT) {
+          gettimeofday(&startTime, NULL);
           m_sharedMemoryBuffer_->writer_.wait();
               m_sharedMemoryBuffer_->writeDataToShm(sharedData);
               counter++;
-              std::cout << "counter: " << counter << std::endl;
           m_sharedMemoryBuffer_->reader_.post();
+          gettimeofday(&endTime, NULL);
+          ofs << startTime.tv_sec << std::setfill('0') << std::setw(6) << std::right << startTime.tv_usec<<",";
+          ofs << endTime.tv_sec << std::setfill('0') << std::setw(6) << std::right << endTime.tv_usec<<",";
+          ofs << std::setfill('0') << std::setw(6) << std::right << startTime.tv_usec << "," << std::setfill('0') << std::setw(6) << endTime.tv_usec << std::endl;
        }
       std::cout << "==========================" << std::endl;
       std::cout << "finish writing" << std::endl;
@@ -61,7 +69,6 @@ SharedMemory<T, U>::read(T** sharedData) {
               *sharedData = new T;
               m_sharedMemoryBuffer_->readDataFromShm(*sharedData);
               counter++;
-              std::cout << "SharedMemory::read sharedData: " << (*sharedData)->id_ << std::endl;
           m_sharedMemoryBuffer_->writer_.post();
       }
       std::cout << "==========================" << std::endl;
@@ -75,6 +82,6 @@ SharedMemory<T, U>::read(T** sharedData) {
 }
 
 // Instantiation of explicit template
-//template class SharedMemory<char, SharedKey>;
+template class SharedMemory<char, SharedKey>;
 template class SharedMemory<Dpi, SharedPacketInformation>;
 

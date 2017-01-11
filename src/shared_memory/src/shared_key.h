@@ -17,7 +17,7 @@ public:
     void writeDataToShm(char*);
     void readDataFromShm(char*);
     interprocess_semaphore writer_, reader_;
-    char sharedData_[16];
+    char sharedData_[64];
 private:
 };
 #endif
