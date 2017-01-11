@@ -1,6 +1,6 @@
 #include "door_api.h"
 
-std::string DOOR_BASE_SOCKET_NAME = "/tmp/door-unix-socket";
+std::string DOOR_BASE_SOCKET_NAME = "/tmp/unix-socket/door-unix-socket";
 
 DoorApi::DoorApi() {
 }

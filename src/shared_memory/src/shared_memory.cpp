@@ -9,7 +9,12 @@ SharedMemory<T, U>::SharedMemory(std::string sharedMemoryName) {
 
 template <class T, class U>
 SharedMemory<T, U>::~SharedMemory() {
-    // TODO: check shared memory is already deleted
+}
+
+template <class T, class U>
+void
+SharedMemory<T, U>::removeSharedMemory() {
+    shared_memory_object::remove(sharedMemoryName_.c_str());
 }
 
 
@@ -21,7 +26,7 @@ SharedMemory<T, U>::write(T* sharedData) {
     struct timespec startTime, endTime;
     std::cout << "SharedMemory::write()" << std::endl;
     shared_memory_object shm(open_or_create, sharedMemoryName_.c_str(), read_write);
-    shm.truncate(sizeof(U)+U::getSharedDataSize());
+    shm.truncate(sizeof(U));
     mapped_region region(shm, read_write);
     void *addr = region.get_address();
     m_sharedMemoryBuffer_ = new (addr) U;
