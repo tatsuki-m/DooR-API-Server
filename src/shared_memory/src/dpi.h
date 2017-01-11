@@ -15,7 +15,6 @@ public:
     ~Dpi();
 
     char data_[1024];
-    //char data_[1024];
 // private:
     //unsigned int id_;
     //unsigned int srcPort_;

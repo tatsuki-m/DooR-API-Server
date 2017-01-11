@@ -24,6 +24,7 @@ public:
     ~SharedMemory();
     void write(T*);
     bool read(T**);
+    void removeSharedMemory();
     T* sharedData_;
     U* m_sharedMemoryBuffer_;
 private:

@@ -9,6 +9,11 @@ SharedMemory<T, U>::SharedMemory(std::string sharedMemoryName) {
 
 template <class T, class U>
 SharedMemory<T, U>::~SharedMemory() {
+}
+
+template <class T, class U>
+void
+SharedMemory<T, U>::removeSharedMemory() {
     shared_memory_object::remove(sharedMemoryName_.c_str());
 }
 

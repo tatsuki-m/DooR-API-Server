@@ -23,8 +23,7 @@ main() {
 
     std::cout << "DoorWorker::run start writing" << std::endl;
     doorShm.write(&dpi);
-
-
+    doorShm.removeSharedMemory();
 /*
     // initialize socket & server instance
     UnixDomainSocketServer socket = UnixDomainSocketServer();
