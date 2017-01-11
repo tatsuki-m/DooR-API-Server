@@ -9,7 +9,7 @@ SharedMemory<T, U>::SharedMemory(std::string sharedMemoryName) {
 
 template <class T, class U>
 SharedMemory<T, U>::~SharedMemory() {
-    // TODO: check shared memory is already deleted
+    shared_memory_object::remove(sharedMemoryName_.c_str());
 }
 
 
