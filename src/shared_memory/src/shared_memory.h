@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <sys/time.h>
+#include <time.h>
 #include <fstream>
 #include <iomanip>
 

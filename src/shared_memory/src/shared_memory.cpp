@@ -18,8 +18,7 @@ void
 SharedMemory<T, U>::write(T* sharedData) {
     int counter = 0;
     std::ofstream ofs("Test.csv");
-    struct timeval startTime;
-    struct timeval endTime;
+    struct timespec startTime, endTime;
     std::cout << "SharedMemory::write()" << std::endl;
     shared_memory_object shm(open_or_create, sharedMemoryName_.c_str(), read_write);
     shm.truncate(sizeof(U)+U::getSharedDataSize());
@@ -32,15 +31,15 @@ SharedMemory<T, U>::write(T* sharedData) {
       std::cout << "start writing" << std::endl;
       std::cout << "==========================" <<  std::endl;
        while(counter<MAX_COUNT) {
-          gettimeofday(&startTime, NULL);
+          clock_gettime(CLOCK_MONOTONIC, &startTime);
           m_sharedMemoryBuffer_->writer_.wait();
               m_sharedMemoryBuffer_->writeDataToShm(sharedData);
               counter++;
           m_sharedMemoryBuffer_->reader_.post();
-          gettimeofday(&endTime, NULL);
-          ofs << startTime.tv_sec << std::setfill('0') << std::setw(6) << std::right << startTime.tv_usec<<",";
-          ofs << endTime.tv_sec << std::setfill('0') << std::setw(6) << std::right << endTime.tv_usec<<",";
-          ofs << std::setfill('0') << std::setw(6) << std::right << startTime.tv_usec << "," << std::setfill('0') << std::setw(6) << endTime.tv_usec << std::endl;
+          clock_gettime(CLOCK_MONOTONIC, &endTime);
+          ofs << startTime.tv_sec << std::setfill('0') << std::setw(6) << std::right << startTime.tv_nsec<<",";
+          ofs << endTime.tv_sec << std::setfill('0') << std::setw(6) << std::right << endTime.tv_nsec<<",";
+          ofs << std::setfill('0') << std::setw(6) << std::right << startTime.tv_nsec << "," << std::setfill('0') << std::setw(6) << endTime.tv_nsec << std::endl;
        }
       std::cout << "==========================" << std::endl;
       std::cout << "finish writing" << std::endl;
