@@ -12,10 +12,9 @@
 int
 main() {
     //std::cout << "main" << std::this_thread::get_id() << std::endl;
-    std::string shmKey = "hoge";
+    std::string shmKey = "hogehoge";
     SharedMemory<Dpi, SharedPacketInformation> doorShm = SharedMemory<Dpi, SharedPacketInformation>(shmKey);
     std::cout << "DoorWorker::run" << std::endl;
-    //Dpi dpi = Dpi(id, srcPort, dstPort);
     Dpi dpi = Dpi();
     std::cout << sizeof(dpi.data_) <<  std::endl;
     for (int i=0; i < sizeof(dpi.data_); i++) {
