@@ -6,6 +6,7 @@
 #include <vector>
 #include <time.h>
 #include <fstream>
+#include <iomanip>
 
 enum RecorderType {
     NORMAL = 0,
@@ -15,17 +16,19 @@ enum RecorderType {
 
 class TimeRecorder
 {
-public:
-    TimeRecorder();
-    ~TimeRecorder();
 
+public:
+    TimeRecorder(std::string);
+    TimeRecorder(RecorderType, unsigned int);
+    ~TimeRecorder();
+    void record();
+    void pushStartTime();
+    void pushEndTime();
     void write();
 private:
     std::ofstream ofs;
-    unsigned int dataSize_;
-    RecorderType type_;
-    std::vector <struct timespec> startTimes;
-    std::vector <struct timespec> endTimes;
+    std::vector<struct timespec> startTimes;
+    std::vector<struct timespec> endTimes;
 };
 
 #endif
