@@ -22,13 +22,14 @@ template <class T, class U>
 void
 SharedMemory<T, U>::write(T* sharedData) {
     int counter = 0;
-    struct timespec startTime, endTime;
-    //RecorderType type = WRITER;
-    std::ofstream ofs("/tmp/recorder/test-writer-10240.csv");
-    //TimeRecorder recorder(type, sizeof(U));
+    //struct timespec startTime, endTime;
+    RecorderType type = WRITER;
+    //std::ofstream ofs("/tmp/recorder/test-writer-10240.csv");
+    TimeRecorder recorder(type, U::getSharedDataSize());
     std::cout << "SharedMemory::write()" << std::endl;
     shared_memory_object shm(open_or_create, sharedMemoryName_.c_str(), read_write);
-    shm.truncate(sizeof(U));
+    shm.truncate(U::getSharedDataSize());
+    std::cout << "datasize: " << U::getSharedDataSize() << std::endl;
     mapped_region region(shm, read_write);
     void *addr = region.get_address();
     m_sharedMemoryBuffer_ = new (addr) U;
@@ -38,19 +39,21 @@ SharedMemory<T, U>::write(T* sharedData) {
       std::cout << "start writing" << std::endl;
       std::cout << "==========================" <<  std::endl;
        while(counter<MAX_COUNT) {
-          clock_gettime(CLOCK_MONOTONIC, &startTime);
-         // recorder.pushStartTime();
+          //clock_gettime(CLOCK_MONOTONIC, &startTime);
+          recorder.pushStartTime();
           m_sharedMemoryBuffer_->writer_.wait();
               m_sharedMemoryBuffer_->writeDataToShm(sharedData);
               counter++;
           m_sharedMemoryBuffer_->reader_.post();
-          //recorder.pushEndTime();
-          clock_gettime(CLOCK_MONOTONIC, &endTime);
+          //clock_gettime(CLOCK_MONOTONIC, &endTime);
+          recorder.pushEndTime();
+          /*
           ofs << std::setfill('0') << std::setw(6) << std::right << startTime.tv_nsec << ",";
           ofs << std::setfill('0') << std::setw(6) << endTime.tv_nsec << ",";
           ofs << endTime.tv_nsec - startTime.tv_nsec << std::endl;
+          */
        }
-     // recorder.record();
+     recorder.record();
       std::cout << "==========================" << std::endl;
       std::cout << "finish writing" << std::endl;
       std::cout << "==========================" << std::endl;
@@ -66,7 +69,7 @@ SharedMemory<T, U>::read(T** sharedData) {
     //std::ofstream ofs("/tmp/recorder/test-reader-10240.csv");
     //struct timespec startTime, endTime;
     RecorderType type = READER;
-    TimeRecorder recorder(type, sizeof(U));
+    TimeRecorder recorder(type, U::getSharedDataSize());
     std::cout << "SharedMemory::read()" << std::endl;
     shared_memory_object shm(open_or_create, sharedMemoryName_.c_str(), read_write);
     mapped_region region(shm, read_write);

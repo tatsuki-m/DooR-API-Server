@@ -14,7 +14,7 @@ public:
     //Dpi(unsigned int id, char* srcIp, char* dstIp, unsigned int srcPort, unsigned int dstPort, char* data);
     ~Dpi();
 
-    char data_[10240];
+    char data_[102400];
 // private:
     //unsigned int id_;
     //unsigned int srcPort_;

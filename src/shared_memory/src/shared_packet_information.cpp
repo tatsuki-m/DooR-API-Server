@@ -9,7 +9,7 @@ SharedPacketInformation::~SharedPacketInformation() {
 
 size_t
 SharedPacketInformation::getSharedDataSize() {
-    return sizeof(Dpi);
+    return sizeof(sharedData_);
 }
 
 void
