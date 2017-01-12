@@ -22,8 +22,10 @@ template <class T, class U>
 void
 SharedMemory<T, U>::write(T* sharedData) {
     int counter = 0;
-    std::ofstream ofs("Test.csv");
     struct timespec startTime, endTime;
+    //RecorderType type = WRITER;
+    std::ofstream ofs("/tmp/recorder/test-writer-10240.csv");
+    //TimeRecorder recorder(type, sizeof(U));
     std::cout << "SharedMemory::write()" << std::endl;
     shared_memory_object shm(open_or_create, sharedMemoryName_.c_str(), read_write);
     shm.truncate(sizeof(U));
@@ -37,15 +39,18 @@ SharedMemory<T, U>::write(T* sharedData) {
       std::cout << "==========================" <<  std::endl;
        while(counter<MAX_COUNT) {
           clock_gettime(CLOCK_MONOTONIC, &startTime);
+         // recorder.pushStartTime();
           m_sharedMemoryBuffer_->writer_.wait();
               m_sharedMemoryBuffer_->writeDataToShm(sharedData);
               counter++;
           m_sharedMemoryBuffer_->reader_.post();
+          //recorder.pushEndTime();
           clock_gettime(CLOCK_MONOTONIC, &endTime);
-          ofs << startTime.tv_sec << std::setfill('0') << std::setw(6) << std::right << startTime.tv_nsec<<",";
-          ofs << endTime.tv_sec << std::setfill('0') << std::setw(6) << std::right << endTime.tv_nsec<<",";
-          ofs << std::setfill('0') << std::setw(6) << std::right << startTime.tv_nsec << "," << std::setfill('0') << std::setw(6) << endTime.tv_nsec << std::endl;
+          ofs << std::setfill('0') << std::setw(6) << std::right << startTime.tv_nsec << ",";
+          ofs << std::setfill('0') << std::setw(6) << endTime.tv_nsec << ",";
+          ofs << endTime.tv_nsec - startTime.tv_nsec << std::endl;
        }
+     // recorder.record();
       std::cout << "==========================" << std::endl;
       std::cout << "finish writing" << std::endl;
       std::cout << "==========================" << std::endl;
@@ -58,6 +63,10 @@ template <class T, class U>
 bool
 SharedMemory<T, U>::read(T** sharedData) {
     int counter = 0;
+    //std::ofstream ofs("/tmp/recorder/test-reader-10240.csv");
+    //struct timespec startTime, endTime;
+    RecorderType type = READER;
+    TimeRecorder recorder(type, sizeof(U));
     std::cout << "SharedMemory::read()" << std::endl;
     shared_memory_object shm(open_or_create, sharedMemoryName_.c_str(), read_write);
     mapped_region region(shm, read_write);
@@ -69,12 +78,22 @@ SharedMemory<T, U>::read(T** sharedData) {
       std::cout << "start reading" << std::endl;
       std::cout << "==========================" <<  std::endl;
       while(counter<MAX_COUNT) {
+          //clock_gettime(CLOCK_MONOTONIC, &startTime);
+          recorder.pushStartTime();
           m_sharedMemoryBuffer_->reader_.wait();
               *sharedData = new T;
               m_sharedMemoryBuffer_->readDataFromShm(*sharedData);
               counter++;
+          //clock_gettime(CLOCK_MONOTONIC, &endTime);
+          recorder.pushEndTime();
           m_sharedMemoryBuffer_->writer_.post();
+          /*
+          ofs << std::setfill('0') << std::setw(6) << std::right << startTime.tv_nsec << ",";
+          ofs << std::setfill('0') << std::setw(6) << endTime.tv_nsec << ".";
+          ofs << endTime.tv_nsec - startTime.tv_nsec << std::endl;
+          */
       }
+      recorder.record();
       std::cout << "==========================" << std::endl;
       std::cout << "finish reading" << std::endl;
       std::cout << "==========================" <<  std::endl;

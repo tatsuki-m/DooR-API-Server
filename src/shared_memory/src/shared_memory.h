@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <string>
-#include <sys/time.h>
 #include <time.h>
 #include <fstream>
 #include <iomanip>
@@ -12,6 +11,7 @@
 #include <boost/interprocess/mapped_region.hpp>
 #include <boost/interprocess/sync/interprocess_semaphore.hpp>
 
+#include "time_recorder.h"
 #include "shared_packet_information.h"
 #include "shared_key.h"
 #include "dpi.h"

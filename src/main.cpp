@@ -33,5 +33,6 @@ main() {
     std::cout << "DoorWorker::run start writing" << std::endl;
     doorShm.write(&dpi);
     doorShm.removeSharedMemory();
-*/
+
+    return 0;
 }
