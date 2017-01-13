@@ -15,7 +15,7 @@ class DoorApi
 public:
     DoorApi();
     ~DoorApi();
-    void callDoorWithSem(std::string, std::string);
+    bool callDoorWithSem(std::string);
 private:
 };
 
