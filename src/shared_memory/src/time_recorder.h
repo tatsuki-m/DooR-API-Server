@@ -19,7 +19,7 @@ class TimeRecorder
 
 public:
     TimeRecorder(std::string);
-    TimeRecorder(RecorderType, unsigned int);
+    TimeRecorder(RecorderType, unsigned long);
     ~TimeRecorder();
     void record();
     void pushStartTime();

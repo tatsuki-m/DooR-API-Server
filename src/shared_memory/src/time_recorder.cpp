@@ -7,7 +7,7 @@ TimeRecorder::TimeRecorder(std::string fileName) {
     ofs.open(fileName.c_str());
 }
 
-TimeRecorder::TimeRecorder(RecorderType recorderType, unsigned int dataSize) {
+TimeRecorder::TimeRecorder(RecorderType recorderType, unsigned long dataSize) {
     std::string type;
     switch (recorderType) {
         case NORMAL:
@@ -23,7 +23,7 @@ TimeRecorder::TimeRecorder(RecorderType recorderType, unsigned int dataSize) {
           type = "other";
           break;
     }
-    std::string fileName = BASE_FILE_DIR + "test_" + std::to_string(dataSize) + "_" + type;
+    std::string fileName = BASE_FILE_DIR + "docker_" + std::to_string(dataSize) + "_" + type + ".csv";
     ofs.open(fileName.c_str());
 }
 
@@ -47,7 +47,7 @@ TimeRecorder::pushEndTime() {
 void
 TimeRecorder::record() {
     ofs << "start_time, end_time, interval" << std::endl;
-    for(unsigned int i = 0; i != startTimes.size(); ++i) {
+    for(unsigned long i = 0; i != startTimes.size(); ++i) {
         ofs << std::setfill('0') << std::setw(6) << std::right << (startTimes[i].tv_nsec) << ",";
         ofs << std::setfill('0') << std::setw(6) << (endTimes[i].tv_nsec) << ",";
         ofs << (endTimes[i].tv_nsec) - (startTimes[i].tv_nsec) << std::endl;

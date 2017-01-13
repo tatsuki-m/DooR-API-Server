@@ -21,12 +21,10 @@ main() {
     // start server
     socket.run();
 */
-
-    //std::cout << "main" << std::this_thread::get_id() << std::endl;
     std::string shmKey = "hoge";
     SharedMemory<Dpi, SharedPacketInformation> doorShm = SharedMemory<Dpi, SharedPacketInformation>(shmKey);
     Dpi dpi = Dpi();
-    for (int i=0; i < SharedPacketInformation::getSharedDataSize(); i++) {
+    for (unsigned long i = 0; i < SharedPacketInformation::getSharedDataSize(); i++) {
         dpi.data_[i]= 'a';
     }
 
