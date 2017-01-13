@@ -27,6 +27,7 @@ public:
 
     void run();
     std::string getRecievedData();
+    bool hasResponse();
 
 private:
     void create();

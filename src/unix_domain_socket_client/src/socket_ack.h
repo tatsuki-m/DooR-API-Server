@@ -10,6 +10,7 @@ enum SocketType {
 struct SocketAck {
     SocketType type;
     char data[64] = {'\0'};
+    //bool res = false; //use for DooR response
 };
 
 #endif
