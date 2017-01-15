@@ -12,7 +12,6 @@
 
 int
 main() {
-/*
     // initialize socket & server instance
     UnixDomainSocketServer socket = UnixDomainSocketServer();
     DoorApiManager doorApiManager = DoorApiManager();
@@ -20,7 +19,8 @@ main() {
 
     // start server
     socket.run();
-*/
+
+/*
     std::string shmKey = "hoge";
     SharedMemory<Dpi, SharedPacketInformation> doorShm = SharedMemory<Dpi, SharedPacketInformation>(shmKey);
     Dpi dpi = Dpi();
@@ -31,6 +31,7 @@ main() {
     std::cout << "DoorWorker::run start writing" << std::endl;
     doorShm.write(&dpi);
     doorShm.removeSharedMemory();
+*/
 
     return 0;
 }

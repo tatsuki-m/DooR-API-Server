@@ -8,10 +8,15 @@ DoorApi::DoorApi() {
 DoorApi::~DoorApi() {
 }
 
-void
-DoorApi::callDoorWithSem(std::string shmKey, std::string keyword) {
+bool
+DoorApi::callDoorWithSem(std::string shmKey) {
     SocketType type = ASK_DOOR;
     UnixDomainSocketClient socket = UnixDomainSocketClient(DOOR_BASE_SOCKET_NAME, type, shmKey);
     socket.run();
+    if (socket.hasResponse()) {
+        return true;
+    } else {
+        return false;
+    }
 }
 

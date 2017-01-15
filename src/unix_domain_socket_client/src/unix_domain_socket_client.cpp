@@ -99,7 +99,7 @@ UnixDomainSocketClient::getResponse() {
 
         std::cout << "waiting response" << std::endl;
         if ((gs = recv(server_, &ack_, sizeof(ack_), 0)) < 0 ) {
-            std::cerr << "recv" << std::endl;
+            std::cerr << "recv";
             return false;
         } else {
             std::cout << "success: " << ack_.data << std::endl;
@@ -116,5 +116,10 @@ std::string
 UnixDomainSocketClient::getRecievedData() {
     std::string data = ack_.data;
     return data;
+}
+
+bool
+UnixDomainSocketClient::hasResponse() {
+    return true;/*ack_.res*/;
 }
 
