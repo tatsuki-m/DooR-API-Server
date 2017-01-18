@@ -1,6 +1,6 @@
 #include "shared_memory.h"
 
-const int MAX_COUNT = 1002;
+const int MAX_COUNT = 1000;
 std::string BASE_RECORDER_DIR = "/tmp/recorder/";
 std::string ENV = "native";
 
