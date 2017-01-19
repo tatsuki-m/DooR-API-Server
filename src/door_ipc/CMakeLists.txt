@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 
 # packet information"
-set (PROJECT_NAME "door_shared_memory")
+set (PROJECT_NAME "door_ipc")
 
 # avoid cmake warning
 cmake_policy(SET CMP0022 NEW)
@@ -48,15 +48,15 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 
 # specify install of shared library
 # /usr/local/lib
-install(TARGETS door_shared_memory
-    EXPORT          door_shared_memory_export
+install(TARGETS door_ipc
+    EXPORT          door_ipc_export
     LIBRARY         DESTINATION lib
     INCLUDES        DESTINATION include
     PUBLIC_HEADER   DESTINATION "include/${PROJECT_NAME}")
 
-# door_shared_memory-config.cmake
-install(EXPORT door_shared_memory_export
-    FILE door_shared_memory-config.cmake
+# door_ipc-config.cmake
+install(EXPORT door_ipc_export
+    FILE door_ipc-config.cmake
     DESTINATION "share/cmake/${PROJECT_NAME}/"
     EXPORT_LINK_INTERFACE_LIBRARIES)
 
