@@ -77,7 +77,7 @@ SharedMemory<T, U>::read(T** sharedData) {
     */
     //RecorderType type = READER;
     //TimeRecorder recorder(type, U::getSharedDataSize());
-    shared_memory_object shm(open_or_create, sharedMemoryName_.c_str(), read_write);
+    shared_memory_object shm(open_only, sharedMemoryName_.c_str(), read_write);
     mapped_region region(shm, read_write);
     void *addr = region.get_address();
     m_sharedMemoryBuffer_ = static_cast<U*>(addr);
