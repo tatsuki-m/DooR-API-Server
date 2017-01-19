@@ -1,6 +1,6 @@
 #include "shared_memory.h"
 
-const int MAX_COUNT = 1002;
+const int MAX_COUNT = 1000;
 std::string BASE_RECORDER_DIR = "/tmp/recorder/";
 std::string ENV = "native";
 
@@ -69,7 +69,6 @@ SharedMemory<T, U>::write(T* sharedData) {
 template <class T, class U>
 bool
 SharedMemory<T, U>::read(T** sharedData) {
-    int counter = 0;
     /*
     struct timespec startTime, endTime;
     std::string fileName = BASE_RECORDER_DIR + ENV + "_" + std::to_string(U::getSharedDataSize()) + "_reader" + ".csv";
@@ -78,7 +77,7 @@ SharedMemory<T, U>::read(T** sharedData) {
     */
     //RecorderType type = READER;
     //TimeRecorder recorder(type, U::getSharedDataSize());
-    shared_memory_object shm(open_or_create, sharedMemoryName_.c_str(), read_write);
+    shared_memory_object shm(open_only, sharedMemoryName_.c_str(), read_write);
     mapped_region region(shm, read_write);
     void *addr = region.get_address();
     m_sharedMemoryBuffer_ = static_cast<U*>(addr);
@@ -90,7 +89,6 @@ SharedMemory<T, U>::read(T** sharedData) {
           m_sharedMemoryBuffer_->reader_.wait();
               *sharedData = new T;
               m_sharedMemoryBuffer_->readDataFromShm(*sharedData);
-              counter++;
           //clock_gettime(CLOCK_MONOTONIC, &endTime);
           //recorder.pushEndTime();
           m_sharedMemoryBuffer_->writer_.post();
@@ -109,6 +107,6 @@ SharedMemory<T, U>::read(T** sharedData) {
 }
 
 // Instantiation of explicit template
-template class SharedMemory<char, SharedKey>;
+//template class SharedMemory<char, SharedKey>;
 template class SharedMemory<Dpi, SharedPacketInformation>;
 

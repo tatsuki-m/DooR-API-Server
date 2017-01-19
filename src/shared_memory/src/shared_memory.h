@@ -25,9 +25,9 @@ public:
     void write(T*);
     bool read(T**);
     void removeSharedMemory();
-    U* m_sharedMemoryBuffer_;
 private:
     std::string sharedMemoryName_;
+    U* m_sharedMemoryBuffer_;
 };
 
 
