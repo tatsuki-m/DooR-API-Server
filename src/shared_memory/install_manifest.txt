@@ -5,5 +5,7 @@
 /usr/local/include/door_shared_memory/shared_key.h
 /usr/local/include/door_shared_memory/shared_memory.h
 /usr/local/include/door_shared_memory/shared_packet_information.h
+/usr/local/include/door_shared_memory/sync_semaphore.h
+/usr/local/include/door_shared_memory/time_recorder.h
 /usr/local/share/cmake/door_shared_memory/door_shared_memory-config.cmake
 /usr/local/share/cmake/door_shared_memory/door_shared_memory-config-release.cmake

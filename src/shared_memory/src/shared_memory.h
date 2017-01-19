@@ -15,6 +15,7 @@
 #include "shared_packet_information.h"
 #include "shared_key.h"
 #include "dpi.h"
+#include "sync_semaphore.h"
 
 template <class T, class U=SharedPacketInformation> // T=shared data structure, U=Shared class with semaphore
 class SharedMemory
