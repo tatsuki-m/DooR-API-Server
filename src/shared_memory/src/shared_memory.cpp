@@ -69,7 +69,6 @@ SharedMemory<T, U>::write(T* sharedData) {
 template <class T, class U>
 bool
 SharedMemory<T, U>::read(T** sharedData) {
-    int counter = 0;
     /*
     struct timespec startTime, endTime;
     std::string fileName = BASE_RECORDER_DIR + ENV + "_" + std::to_string(U::getSharedDataSize()) + "_reader" + ".csv";
@@ -90,7 +89,6 @@ SharedMemory<T, U>::read(T** sharedData) {
           m_sharedMemoryBuffer_->reader_.wait();
               *sharedData = new T;
               m_sharedMemoryBuffer_->readDataFromShm(*sharedData);
-              counter++;
           //clock_gettime(CLOCK_MONOTONIC, &endTime);
           //recorder.pushEndTime();
           m_sharedMemoryBuffer_->writer_.post();
@@ -109,6 +107,6 @@ SharedMemory<T, U>::read(T** sharedData) {
 }
 
 // Instantiation of explicit template
-template class SharedMemory<char, SharedKey>;
+//template class SharedMemory<char, SharedKey>;
 template class SharedMemory<Dpi, SharedPacketInformation>;
 
