@@ -23,8 +23,8 @@ TimeRecorder::TimeRecorder(RecorderType recorderType, unsigned long dataSize) {
           type = "other";
           break;
     }
-    std::string fileName = BASE_FILE_DIR + "docker_" + std::to_string(dataSize) + "_" + type + ".csv";
-    ofs.open(fileName.c_str());
+    //std::string fileName = BASE_FILE_DIR + "docker_" + std::to_string(dataSize) + "_" + type + ".csv";
+    //ofs.open(fileName.c_str());
 }
 
 TimeRecorder::~TimeRecorder() {

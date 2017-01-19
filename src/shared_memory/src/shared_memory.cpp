@@ -24,6 +24,8 @@ template <class T, class U>
 void
 SharedMemory<T, U>::write(T* sharedData) {
     int counter = 0;
+    SyncSemaphore sem;
+    sem.open(sharedMemoryName_);
     //struct timespec startTime, endTime;
     //std::string fileName = BASE_RECORDER_DIR + ENV + "_" + std::to_string(U::getSharedDataSize()) + "_writer" + ".csv";
     //std::ofstream ofs(fileName.c_str());
@@ -42,6 +44,7 @@ SharedMemory<T, U>::write(T* sharedData) {
       std::cout << "==========================" << std::endl;
       std::cout << "start writing" << std::endl;
       std::cout << "==========================" <<  std::endl;
+      sem.post(); /*notify client*/
       while(counter<MAX_COUNT) {
           //clock_gettime(CLOCK_MONOTONIC, &startTime);
           //recorder.pushStartTime();
