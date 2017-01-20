@@ -3,8 +3,8 @@
 
 enum DoorSocketType {
     SHM = 0,
-    UNIX_DOMAIN_SOCKET = 1,
-    TCP_SOCKET = 2,
+    UD_SOCK = 1,
+    TCP_SOCK = 2,
 };
 
 struct DoorSocket {

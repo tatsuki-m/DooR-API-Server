@@ -47,8 +47,6 @@ SocketClient::run() {
             createUnixDomain();
             break;
     }
-    handle();
-    closeSocket();
 }
 
 void

@@ -24,10 +24,10 @@ public:
     ~SocketClient();
 
     void run();
+    void handle();
 private:
     void createUnixDomain();
     void createTcp();
-    void handle();
     bool sendAck();
     bool getResponse();
     void closeSocket();
