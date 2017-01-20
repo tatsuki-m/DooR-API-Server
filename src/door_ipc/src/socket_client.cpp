@@ -17,18 +17,16 @@ SocketClient::SocketClient(std::string socketName, std::string addr, int port) {
 }
 
 SocketClient::~SocketClient() {
-    closeSocket();
 }
 
 void
 SocketClient::closeSocket() {
     try {
         if(close(server_) == -1) {
-            std::cerr << "SocketClient::closeSocket" << std::endl;
+            std::cerr << "SocketClient::closeSocket: ";
             throw;
         }
     } catch(...) {
-        unlink(socketName_.c_str());
         close(server_);
     }
 }
@@ -38,17 +36,24 @@ SocketClient::run() {
     std::cout << "SocketClient::run" << std::endl;
     switch (type_) {
         case UNIX_DOMAIN:
+            std::cout << "CASE: UNIXDOMAIN" << std::endl;
             createUnixDomain();
+            break;
         case TCP:
+            std::cout << "CASE: TCP" << std::endl;
             createTcp();
+            break;
         default:
             createUnixDomain();
+            break;
     }
     handle();
+    closeSocket();
 }
 
 void
 SocketClient::createUnixDomain() {
+    std::cout << "SocketClient::createUnixDomain" << std::endl;
     try {
         struct sockaddr_un server_addr;
         memset(&server_addr, 0, sizeof(server_addr));
@@ -65,13 +70,13 @@ SocketClient::createUnixDomain() {
             throw;
         }
     } catch(...) {
-        unlink(socketName_.c_str());
         close(server_);
     }
 }
 
 void
 SocketClient::createTcp() {
+    std::cout << "SocketClient::createTcp" << std::endl;
     try {
         struct sockaddr_in server_addr;
         memset(&server_addr, 0, sizeof(server_addr));
@@ -89,7 +94,6 @@ SocketClient::createTcp() {
             throw;
         }
     } catch(...) {
-        unlink(socketName_.c_str());
         close(server_);
     }
 }
@@ -103,7 +107,6 @@ SocketClient::handle() {
         is_success = getResponse();
         if (!is_success) throw;
     } catch(...) {
-        unlink(socketName_.c_str());
         close(server_);
     }
 }
@@ -120,7 +123,6 @@ SocketClient::sendAck() {
             return true;
         }
     } catch(...) {
-        unlink(socketName_.c_str());
         close(server_);
         return false;
     }
@@ -140,7 +142,6 @@ SocketClient::getResponse() {
             return true;
         }
     } catch(...) {
-        unlink(socketName_.c_str());
         close(server_);
         return false;
     }
