@@ -1,17 +1,43 @@
-#ifndef DOOR_SOCKET_H_
-#define DOOR_SOCKET_H_
+#ifndef SOCKET_SERVER_H_
+#define SOCKET_SERVER_H_
 
-enum DoorSocketType {
-    SHM = 0,
-    UNIX_DOMAIN_SOCKET = 1,
-    TCP_SOCKET = 2,
-};
+#include <iostream>
+#include <string>
+#include <errno.h>
+#include <netdb.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/un.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
-struct DoorSocket {
-    DoorSocketType  type;
-    char data[16] = {'\0'};
-    char ipAddress[16] = {'\0'};
-    unsigned int port = 0;
+#include "dpi.h"
+
+class SocketServer
+{
+
+public:
+    SocketServer(std::string);
+    SocketServer(std::string, std::string, int);
+    ~SocketServer();
+    void run();
+private:
+    void createUnixDomain();
+    void createTcp();
+    void serveUnixDomain();
+    void serveTcp();
+    void closeSocket();
+    void handle(int);
+    bool getRequest(int, Dpi&);
+    void sendDpiData(int, Dpi&);
+
+    int server_;
+    int port_;
+    std::string socketName_;
+    std::string addr_;
+    ConType type_;
 };
 
 #endif
