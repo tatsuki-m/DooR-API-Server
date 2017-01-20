@@ -5,6 +5,11 @@
 #include <cstring>
 #include <time.h>
 
+enum ConType {
+    UNIX_DOMAIN = 1,
+    TCP = 2,
+};
+
 class Dpi
 {
 
