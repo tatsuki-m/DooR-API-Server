@@ -5,6 +5,11 @@
 #include <cstring>
 #include <time.h>
 
+enum ConType {
+    UNIX_DOMAIN = 1,
+    TCP = 2,
+};
+
 class Dpi
 {
 
@@ -14,7 +19,7 @@ public:
     //Dpi(unsigned int id, char* srcIp, char* dstIp, unsigned int srcPort, unsigned int dstPort, char* data);
     ~Dpi();
 
-    char data_[1514];
+    char data_[1500];
 // private:
     //unsigned int id_;
     //unsigned int srcPort_;

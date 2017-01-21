@@ -1,19 +1,9 @@
 #include "unix_domain_socket_server.h"
 
-std::string BASE_SOCKET_NAME = "/tmp/unix-socket/unix-socket";
 
-void
-signalHandler(int sigNum) {
-    std::cout << "Interrupt signal (" << sigNum << ") received." << std::endl;
-    unlink(BASE_SOCKET_NAME.c_str());
-    std::cout << "Going to sleep.." <<std::endl;
-    exit(sigNum);
-}
-
-// default  use for SHARED_SOCKET
-UnixDomainSocketServer::UnixDomainSocketServer() {
+UnixDomainSocketServer::UnixDomainSocketServer(std::string socketName) {
     std::cout << "UnisDomainSocketServer: " << std::this_thread::get_id() << std::endl;
-    socketName_ = BASE_SOCKET_NAME;
+    socketName_ = socketName;
     counter_ = 0;
     unlink(socketName_.c_str());
 }
@@ -24,7 +14,6 @@ UnixDomainSocketServer::~UnixDomainSocketServer() {
 
 void
 UnixDomainSocketServer::run() {
-    signal(SIGINT, signalHandler);
     create();
     serve();
 }
@@ -120,7 +109,7 @@ void
 UnixDomainSocketServer::sendSocketName(int client, SocketAck &ack) {
     std::cout << "UnisDomainSocketServer::sendSocketName: " << std::endl;
     int cc;
-    std::string socketName = KeyGenerator::createSocketName(BASE_SOCKET_NAME, counter_);
+    std::string socketName = KeyGenerator::createSocketName(socketName_, counter_);
     strcpy(ack.data, socketName.c_str());
     std::cout << "socket Name: ack.data =  " << ack.data << std::endl;
     std::cout << "socket Name: socketName = " << socketName << std::endl;

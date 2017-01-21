@@ -22,6 +22,13 @@ SyncSemaphore::create(std::string semKey) {
     }
 }
 
+int
+SyncSemaphore::getValue() {
+    int value ;
+    sem_getvalue(sem, &value);
+    return value;
+}
+
 void
 SyncSemaphore::open(std::string semKey) {
     std::cout << "SyncSemaphore::open" << std::endl;

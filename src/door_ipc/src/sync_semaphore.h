@@ -11,11 +11,13 @@ class SyncSemaphore {
 public:
     SyncSemaphore();
     ~SyncSemaphore();
+
     void wait();
     void post();
     void close();
     void create(std::string);
     void open(std::string);
+    int getValue();
 private:
     std::string semKey_;
     sem_t *sem;

@@ -8,12 +8,9 @@ DoorApi::DoorApi() {
 DoorApi::~DoorApi() {
 }
 
-bool
-DoorApi::callDoorWithSem(std::string shmKey) {
-    bool is_success;
-    DoorSocketType type = SHM;
+void
+DoorApi::callDoor(std::string shmKey, DoorSocketType type) {
     DoorUnixDomainSocketClient socket = DoorUnixDomainSocketClient(DOOR_BASE_SOCKET_NAME, type, shmKey);
-    is_success =  socket.run();
-    return is_success;
+    socket.run();
 }
 
