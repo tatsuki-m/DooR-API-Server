@@ -47,6 +47,7 @@ SocketClient::run() {
             createUnixDomain();
             break;
     }
+    handle();
 }
 
 void
@@ -143,5 +144,14 @@ SocketClient::getResponse() {
         close(server_);
         return false;
     }
+}
+
+void
+SocketClient::getDpi(Dpi*& dpi) {
+    std::cout << "dpi: " << &dpi << std::endl;
+    dpi = &dpi_;
+    std::cout << "dpi: " << &dpi_ << std::endl;
+    std::cout << "dpi: " << dpi_.data_ << std::endl;
+
 }
 

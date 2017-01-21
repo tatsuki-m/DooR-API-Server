@@ -24,8 +24,9 @@ public:
     ~SocketClient();
 
     void run();
-    void handle();
+    void getDpi(Dpi*& dpi);
 private:
+    void handle();
     void createUnixDomain();
     void createTcp();
     bool sendAck();
