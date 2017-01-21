@@ -33,12 +33,14 @@ private:
     void handle(int);
     bool getRequest(int, Dpi&);
     void sendDpiData(int, Dpi&);
+    void notifyClient();
 
     int server_;
     int port_;
     std::string socketName_;
     std::string addr_;
     ConType type_;
+    SyncSemaphore sem_;
 };
 
 #endif

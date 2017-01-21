@@ -1,11 +1,14 @@
 #include "socket_server.h"
 
+int MAX_COUNT = 1000;
+
 SocketServer::SocketServer(std::string socketName) {
     std::string base_dir = "/tmp/unix-socket/";
     socketName_ = base_dir + socketName;
     type_ = UNIX_DOMAIN;
     addr_ = "";
     port_ = 0;
+    sem_.open(socketName);
     unlink(socketName_.c_str());
 }
 
@@ -166,8 +169,8 @@ SocketServer::serveTcp() {
     struct sockaddr_in client_addr;
     socklen_t clientlen = sizeof(client_addr);
 
+    std::cout << "socketTcp running" << std::endl;
     while (1) {
-        std::cout << "socketTcp running" << std::endl;
         try {
             if ((client = accept(server_, (struct sockaddr *)&client_addr, &clientlen)) > 0) {
                 handle(client);

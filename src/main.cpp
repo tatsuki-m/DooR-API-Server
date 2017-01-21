@@ -20,11 +20,11 @@ signalHandler(int sigNum) {
     std::cout << "unlink fd....." <<std::endl;
     std::string socketName = "/tmp/unix-socket/unix-socket";
     unlink(socketName.c_str());
-    //system("exec rm  /tmp/unix-socket/*");
+    system("exec rm  /tmp/unix-socket/*");
 
     std::cout << "delete shm" << std::endl;
-    //system("exec rm  /dev/shm/ShmKey*");
-    //system("exec rm  /dev/shm/sem.*");
+    system("exec rm  /dev/shm/ShmKey*");
+    system("exec rm  /dev/shm/sem.*");
 
     std::cout << "Going to sleep.." <<std::endl;
     exit(sigNum);
