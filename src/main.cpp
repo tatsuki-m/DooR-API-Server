@@ -9,6 +9,7 @@
 
 #include "door_ipc/shared_memory.h"
 #include "door_ipc/shared_packet_information.h"
+#include "door_ipc/sync_semaphore.h"
 #include "door_ipc/dpi.h"
 #include "door_api/door_api.h"
 
@@ -31,7 +32,7 @@ signalHandler(int sigNum) {
 
 int
 main() {
-   signal(SIGINT, signalHandler);
+    signal(SIGINT, signalHandler);
 
    std::string socketName = "/tmp/unix-socket/unix-socket";
     // initialize socket & server instance
@@ -40,6 +41,11 @@ main() {
     socket.subscribe(&doorApiManager);
     // start server
     socket.run();
+/*
+    SyncSemaphore sem;
+    sem.open("hoge");
+    sem.post();
+*/
 
 /*
     std::string shmKey = "hoge";
