@@ -13,7 +13,6 @@
 #include <unistd.h>
 #include <string>
 #include <thread>
-#include <csignal>
 
 #include "i_subject.h"
 #include "key_generator.h"
@@ -23,7 +22,7 @@ class UnixDomainSocketServer : public ISubject
 {
 
 public:
-    UnixDomainSocketServer();
+    UnixDomainSocketServer(std::string);
     ~UnixDomainSocketServer();
     void run();
 private:
