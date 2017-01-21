@@ -12,7 +12,7 @@ class DoorApi
 public:
     DoorApi();
     ~DoorApi();
-    bool callDoor(std::string, DoorSocketType);
+    void callDoor(std::string, DoorSocketType);
 private:
 };
 
