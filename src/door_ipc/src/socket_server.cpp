@@ -19,7 +19,6 @@ SocketServer::SocketServer(std::string socketName, std::string addr, int port) {
 }
 
 SocketServer::~SocketServer() {
-    closeSocket();
 }
 
 void
@@ -30,15 +29,17 @@ SocketServer::closeSocket() {
             throw;
         }
         unlink(socketName_.c_str());
+        sem_.close();
     } catch(...) {
         unlink(socketName_.c_str());
         close(server_);
+        sem_.close();
     }
 }
 
 void
 SocketServer::run() {
-    std::cout << "SocketClient::run" << std::endl;
+    //std::cout << "SocketClient::run" << std::endl;
     switch (type_) {
         case UNIX_DOMAIN:
             std::cout << "CASE: UNIXDOMAIN" << std::endl;
@@ -139,11 +140,12 @@ SocketServer::createTcp() {
 void
 SocketServer::serveUnixDomain() {
     int client;
+    int counter = 0;
     struct sockaddr_un client_addr;
     socklen_t clientlen = sizeof(client_addr);
-
-    while (1) {
-        std::cout << "socketUnixDomain running" << std::endl;
+    sem_.post();
+    std::cout << "socketUnixDomain running" << std::endl;
+    while (counter<MAX_COUNT) {
         try {
             if ((client = accept(server_, (struct sockaddr *)&client_addr, &clientlen)) > 0) {
                 handle(client);
@@ -153,6 +155,7 @@ SocketServer::serveUnixDomain() {
         } catch(...) {
             closeSocket();
         }
+        counter++;
     }
     closeSocket();
 }
@@ -189,20 +192,20 @@ SocketServer::handle(int client) {
 
 bool
 SocketServer::getRequest(int client, Dpi &dpi) {
-    std::cout << "UnixScoket::getRequest: " << std::endl;
+    //std::cout << "UnixScoket::getRequest: " << std::endl;
     int cc;
     if ((cc=recv(client, &dpi, sizeof(dpi), 0)) > 0) {
-        std::cout << "UnixScoket::getRequest success " << std::endl;
+        //std::cout << "UnixScoket::getRequest success " << std::endl;
         return true;
     } else {
-        std::cout << "UnixScoket::getRequest fail " << std::endl;
+        //std::cout << "UnixScoket::getRequest fail " << std::endl;
         return false;
     }
 }
 
 void
 SocketServer::sendDpiData(int client, Dpi &dpi) {
-    std::cout << "SocketServer::sendDpiData" << std::endl;
+    //std::cout << "SocketServer::sendDpiData" << std::endl;
     int cc;
 
     // insertData
@@ -218,6 +221,6 @@ SocketServer::sendDpiData(int client, Dpi &dpi) {
     } catch(...) {
         closeSocket();
     }
-    std::cout << "SocketServer::sendDpiData success" << std::endl;
+    //std::cout << "SocketServer::sendDpiData success" << std::endl;
 }
 

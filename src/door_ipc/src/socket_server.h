@@ -14,6 +14,7 @@
 #include <arpa/inet.h>
 
 #include "dpi.h"
+#include "sync_semaphore.h"
 
 class SocketServer
 {

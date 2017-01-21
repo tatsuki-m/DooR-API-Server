@@ -33,14 +33,14 @@ SocketClient::closeSocket() {
 
 void
 SocketClient::run() {
-    std::cout << "SocketClient::run" << std::endl;
+    //std::cout << "SocketClient::run" << std::endl;
     switch (type_) {
         case UNIX_DOMAIN:
-            std::cout << "CASE: UNIXDOMAIN" << std::endl;
+            //std::cout << "CASE: UNIXDOMAIN" << std::endl;
             createUnixDomain();
             break;
         case TCP:
-            std::cout << "CASE: TCP" << std::endl;
+            //std::cout << "CASE: TCP" << std::endl;
             createTcp();
             break;
         default:
@@ -52,7 +52,7 @@ SocketClient::run() {
 
 void
 SocketClient::createUnixDomain() {
-    std::cout << "SocketClient::createUnixDomain" << std::endl;
+    //std::cout << "SocketClient::createUnixDomain" << std::endl;
     try {
         struct sockaddr_un server_addr;
         memset(&server_addr, 0, sizeof(server_addr));
@@ -63,7 +63,6 @@ SocketClient::createUnixDomain() {
             std::cerr << "socket: " << std::endl;
             throw;
         }
-        std::cout << "will connect" << std::endl;
         if (connect(server_, (const struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
             std::cerr << "connect: " << std::endl;
             throw;
@@ -75,7 +74,7 @@ SocketClient::createUnixDomain() {
 
 void
 SocketClient::createTcp() {
-    std::cout << "SocketClient::createTcp" << std::endl;
+    //std::cout << "SocketClient::createTcp" << std::endl;
     try {
         struct sockaddr_in server_addr;
         memset(&server_addr, 0, sizeof(server_addr));
@@ -87,7 +86,6 @@ SocketClient::createTcp() {
             std::cerr << "socket: " << std::endl;
             throw;
         }
-        std::cout << "will connect" << std::endl;
         if (connect(server_, (const struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
             std::cerr << "connect: " << std::endl;
             throw;
@@ -112,7 +110,7 @@ SocketClient::handle() {
 
 bool
 SocketClient::sendAck() {
-    std::cout << "SocketClient::sendAck()" << std::endl;
+    //std::cout << "SocketClient::sendAck()" << std::endl;
     try {
         int ss;
         if ((ss = send(server_, &dpi_, sizeof(dpi_), 0)) < 0) {
@@ -132,12 +130,12 @@ SocketClient::getResponse() {
     try {
         int gs;
 
-        std::cout << "waiting response" << std::endl;
+        //std::cout << "waiting response" << std::endl;
         if ((gs = recv(server_, &dpi_, sizeof(dpi_), 0)) < 0 ) {
             std::cerr << "recv";
             return false;
         } else {
-            std::cout << "success: " << dpi_.data_ << std::endl;
+            //std::cout << "success: " << dpi_.data_ << std::endl;
             return true;
         }
     } catch(...) {
@@ -148,10 +146,6 @@ SocketClient::getResponse() {
 
 void
 SocketClient::getDpi(Dpi*& dpi) {
-    std::cout << "dpi: " << &dpi << std::endl;
     dpi = &dpi_;
-    std::cout << "dpi: " << &dpi_ << std::endl;
-    std::cout << "dpi: " << dpi_.data_ << std::endl;
-
 }
 
