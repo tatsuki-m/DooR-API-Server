@@ -25,13 +25,13 @@ public:
 
     void run();
     void getDpi(Dpi*& dpi);
-private:
+    void closeSocket();
     void handle();
+private:
     void createUnixDomain();
     void createTcp();
     bool sendAck();
     bool getResponse();
-    void closeSocket();
 
     int server_;
     int port_;
