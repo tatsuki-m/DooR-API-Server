@@ -3,7 +3,7 @@
 # File organization
 
 ```
-chatit-location_recommend
+DooR-API-Server
 │
 ├ door_api/ ------------------------------ Shared library: Recieve request from Door Bridge and request Door with unix domain socket.
 ├ door_ipc/ ------------------------------ Shared library: Define inter process communication, this library is used by Application and DooR.
