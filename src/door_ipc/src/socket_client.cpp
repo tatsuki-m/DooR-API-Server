@@ -96,10 +96,12 @@ SocketClient::createTcp() {
 
 void
 SocketClient::handle() {
+    //std::cout << "SocketClient::handle()" << std::endl;
     try {
         bool is_sent, is_success;
         is_sent = sendAck();
         if (!is_sent) throw;
+        //std::cout << "sendAck success()" << std::endl;
         is_success = getResponse();
         if (!is_success) throw;
     } catch(...) {

@@ -18,7 +18,7 @@ signalHandler(int sigNum) {
     std::cout << "Interrupt signal (" << sigNum << ") received." << std::endl;
 
     std::cout << "unlink fd....." <<std::endl;
-    std::string socketName = "/tmp/unix-socket/unix-socket";
+    std::string socketName = "/tmp/init-socket";
     unlink(socketName.c_str());
     system("exec rm  /tmp/unix-socket/*");
 
@@ -34,28 +34,31 @@ int
 main() {
     signal(SIGINT, signalHandler);
 
-   std::string socketName = "/tmp/unix-socket/unix-socket";
+    std::string socketName = "/tmp/init-socket";
     // initialize socket & server instance
     UnixDomainSocketServer socket = UnixDomainSocketServer(socketName);
     DoorApiManager doorApiManager = DoorApiManager();
     socket.subscribe(&doorApiManager);
     // start server
     socket.run();
-/*
-    SyncSemaphore sem;
-    sem.open("hoge");
-    sem.post();
-*/
 
 /*
     std::string shmKey = "hoge";
+
+    int counter = 0;
+    struct timespec startTime, endTime;
     SharedMemory<Dpi, SharedPacketInformation> doorShm = SharedMemory<Dpi, SharedPacketInformation>(shmKey);
-    Dpi* dpi = NULL;
-    doorShm.read(&dpi);
-    std::cout << dpi->data_ << std::endl;
-
-    delete dpi;
+    clock_gettime(CLOCK_MONOTONIC, &startTime);
+    while(counter<1000) {
+        counter++;
+    }
+    clock_gettime(CLOCK_MONOTONIC, &endTime);
+    std::string fileName = "hoge.csv";
+    std::cout << fileName << std::endl;
+    std::ofstream ofs(fileName.c_str(), std::ios::app);
+    ofs << std::setfill('1') << std::setw(6) << startTime.tv_nsec << ",";
+    ofs << std::setfill('0') << std::setw(6) << endTime.tv_nsec << ",";
+    ofs << endTime.tv_nsec - startTime.tv_nsec << std::endl;
 */
-
     return 0;
 }

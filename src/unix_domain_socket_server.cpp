@@ -1,11 +1,8 @@
 #include "unix_domain_socket_server.h"
 
-
 UnixDomainSocketServer::UnixDomainSocketServer(std::string socketName) {
-    std::cout << "UnisDomainSocketServer: " << std::this_thread::get_id() << std::endl;
     socketName_ = socketName;
     counter_ = 0;
-    unlink(socketName_.c_str());
 }
 
 UnixDomainSocketServer::~UnixDomainSocketServer() {
@@ -32,24 +29,24 @@ UnixDomainSocketServer::create() {
         // create socket
         server_ = socket(AF_UNIX, SOCK_STREAM, 0);
         if (!server_) {
-            std::cerr << "UnisDomainSocketServer::Create socket: ";
+            std::cerr << "UnixDomainSocketServer::Create socket: ";
             throw;
         }
 
         if (setsockopt(server_, SOL_SOCKET, SO_REUSEADDR, &soval, sizeof(soval)) == -1 ) {
-            std::cerr << "UnisDomainSocketServer::Create setsockopt: ";
+            std::cerr << "UnixDomainSocketServer::Create setsockopt: ";
             throw;
         }
 
         // call bind to associate the socket with the UNIX file system
         if (bind(server_, (const struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
-            std::cerr << "UnisDomainSocketServer::Create bind: ";
+            std::cerr << "UnixDomainSocketServer::Create bind: ";
             throw;
         }
 
         // convert the socket listen for incoming connections
         if (listen(server_, 10) < 0) {
-            std::cerr << "UnisDomainSocketServer::Create listen: ";
+            std::cerr << "UnixDomainSocketServer::Create listen: ";
             throw;
         }
     } catch(...) {

@@ -212,11 +212,13 @@ SocketServer::sendDpiData(int client, Dpi &dpi) {
     int cc;
 
     // insertData
+    //std::cout << "create data" << std::endl;
     for (unsigned int i =0; i < sizeof(dpi.data_); i++) {
         dpi.data_[i] = 'a';
     }
 
     try {
+    //std::cout << "sending data" << std::endl;
         if ((cc = send(client, &dpi, sizeof(dpi), 0)) < 0) {
             std::cerr << "UnisDomainSocketServer::sendSocketName";
             throw;
