@@ -114,10 +114,11 @@ SocketClient::sendAck() {
     //std::cout << "SocketClient::sendAck()" << std::endl;
     try {
         int ss;
+        //std::cout << "send" << std::endl;
         if ((ss = send(server_, &dpi_, sizeof(dpi_), 0)) < 0) {
-            std::cerr << "send: " << std::endl;
             return false;
         } else {
+            //std::cout << "send success" << std::endl;
             return true;
         }
     } catch(...) {

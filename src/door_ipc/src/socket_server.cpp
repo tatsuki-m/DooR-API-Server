@@ -143,14 +143,17 @@ SocketServer::createTcp() {
 void
 SocketServer::serveUnixDomain() {
     int client;
-    int counter = 0;
+    int counter =0;
     struct sockaddr_un client_addr;
     socklen_t clientlen = sizeof(client_addr);
     sem_.post();
-    std::cout << "socketUnixDomain running" << std::endl;
+    //std::cout << "socketUnixDomain running" << std::endl;
     while (counter<MAX_COUNT) {
+    //while(true) {
         try {
+            //std::cout << "accept" << std::endl;
             if ((client = accept(server_, (struct sockaddr *)&client_addr, &clientlen)) > 0) {
+                //std::cout << "handling" << std::endl;
                 handle(client);
             } else {
                 throw;
@@ -169,8 +172,9 @@ SocketServer::serveTcp() {
     struct sockaddr_in client_addr;
     socklen_t clientlen = sizeof(client_addr);
 
-    std::cout << "socketTcp running" << std::endl;
+    //std::cout << "socketTcp running" << std::endl;
     while (1) {
+        //std::cout << "socketTcp running" << std::endl;
         try {
             if ((client = accept(server_, (struct sockaddr *)&client_addr, &clientlen)) > 0) {
                 handle(client);
@@ -186,6 +190,7 @@ SocketServer::serveTcp() {
 
 void
 SocketServer::handle(int client) {
+    //std::cout << "SocketServer::handle" << std::endl;
     Dpi dpi;
     bool is_success = getRequest(client, dpi);
     if (is_success) {

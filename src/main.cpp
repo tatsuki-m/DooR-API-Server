@@ -34,7 +34,7 @@ int
 main() {
     signal(SIGINT, signalHandler);
 
-    std::string socketName = "/tmp/init-socket";
+    std::string socketName = "/tmp/unix-socket/init-socket";
     // initialize socket & server instance
     UnixDomainSocketServer socket = UnixDomainSocketServer(socketName);
     DoorApiManager doorApiManager = DoorApiManager();

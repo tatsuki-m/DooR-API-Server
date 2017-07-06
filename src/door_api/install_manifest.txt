@@ -2,5 +2,7 @@
 /usr/local/lib/libdoor_api.so.1
 /usr/local/lib/libdoor_api.so
 /usr/local/include/door_api/door_api.h
+/usr/local/include/door_api/door_socket.h
+/usr/local/include/door_api/door_unix_domain_socket_client.h
 /usr/local/share/cmake/door_api/door_api-config.cmake
 /usr/local/share/cmake/door_api/door_api-config-release.cmake

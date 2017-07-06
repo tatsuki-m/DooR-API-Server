@@ -35,6 +35,8 @@ private:
 
     int server_;
     int port_;
+    // for mesurement
+    static int counter;
     std::string socketName_;
     std::string addr_;
     ConType type_;

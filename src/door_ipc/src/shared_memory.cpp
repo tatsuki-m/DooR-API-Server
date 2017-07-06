@@ -46,6 +46,7 @@ SharedMemory<T, U>::write(T* sharedData) {
       std::cout << "==========================" <<  std::endl;
       sem.post(); /*notify client*/
       while(counter<MAX_COUNT) {
+      //while(true){
           //clock_gettime(CLOCK_MONOTONIC, &startTime);
           //recorder.pushStartTime();
           m_sharedMemoryBuffer_->writer_.wait();
