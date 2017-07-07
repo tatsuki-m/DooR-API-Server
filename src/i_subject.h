@@ -11,7 +11,8 @@ public:
     virtual ~ISubject();
     virtual void subscribe(DoorApiManager* server);
     virtual void unsubscribe();
-    virtual void notify(std::string);
+    virtual void notifyCreate(std::string);
+    virtual bool notifyDestroy(unsigned int);
 
 private:
     DoorApiManager* doorApiManager_;

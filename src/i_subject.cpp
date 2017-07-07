@@ -22,8 +22,13 @@ ISubject::unsubscribe() {
 }
 
 void
-ISubject::notify(std::string socketName) {
+ISubject::notifyCreate(std::string socketName) {
     (doorApiManager_)->create(socketName);
+}
+
+bool
+ISubject::notifyDestroy(unsigned int workerId) {
+    return (doorApiManager_)->destroy(workerId);
 }
 
 #endif

@@ -7,3 +7,7 @@ void
 IObserver::create(std::string) {
 }
 
+bool
+IObserver::destroy(unsigned int) {
+}
+

@@ -117,7 +117,7 @@ UnixDomainSocketServer::sendSocketName(int client, SocketAck &ack) {
             std::cerr << "UnisDomainSocketServer::sendSocketName";
             throw;
         } else {
-            notifyServer(socketName);
+            notifyCreate(socketName);
         }
     } catch(...) {
         closeSocket();
@@ -126,9 +126,15 @@ UnixDomainSocketServer::sendSocketName(int client, SocketAck &ack) {
 }
 
 void
-UnixDomainSocketServer::notifyServer(std::string socketName) {
-    std::cout << "UnisDomainSocketServer::notifyServer()" << std::endl;
-    ISubject::notify(socketName);
+UnixDomainSocketServer::notifyCreate(std::string socketName) {
+    std::cout << "UnisDomainSocketServer::notifyCreate()" << std::endl;
+    ISubject::notifyCreate(socketName);
+}
+
+bool
+UnixDomainSocketServer::notifyDestroy(unsigned int workerId) {
+    std::cout << "UnisDomainSocketServer::notifyDestroy()" << std::endl;
+    ISubject::notifyDestroy(workerId);
 }
 
 void

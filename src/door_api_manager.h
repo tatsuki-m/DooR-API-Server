@@ -17,9 +17,10 @@ public:
     DoorApiManager();
     ~DoorApiManager();
     void create(std::string);
+    bool destroy(unsigned int);
 
 private:
-    unsigned int workerNum_;
+    unsigned int workerId_;
     std::vector<DoorApiWorker*> doorApiWorkers;
 };
 
