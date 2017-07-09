@@ -62,7 +62,7 @@ UnixDomainSocketServer::serve() {
     socklen_t clientlen = sizeof(client_addr);
 
     while (1) {
-        std::cout << "socket running" << std::endl;
+        std::cout << "UnixDomainSocketServer running" << std::endl;
         try {
             if ((client = accept(server_, (struct sockaddr *)&client_addr, &clientlen)) > 0) {
                 handle(client);
@@ -105,7 +105,7 @@ UnixDomainSocketServer::getRequest(int client, SocketAck &ack) {
 
 void
 UnixDomainSocketServer::sendSocketName(int client, SocketAck &ack) {
-    std::cout << "UnisDomainSocketServer::sendSocketName: " << std::endl;
+    std::cout << "UnixDomainSocketServer::sendSocketName: " << std::endl;
     int cc;
     std::string socketName = KeyGenerator::createSocketName(socketName_, counter_);
     strcpy(ack.data, socketName.c_str());

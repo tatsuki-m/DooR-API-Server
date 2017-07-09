@@ -18,7 +18,7 @@ signalHandler(int sigNum) {
     std::cout << "Interrupt signal (" << sigNum << ") received." << std::endl;
 
     std::cout << "unlink fd....." <<std::endl;
-    std::string socketName = "/tmp/init-socket";
+    std::string socketName = "/tmp/unix-socket/init-socket";
     unlink(socketName.c_str());
     system("exec rm  /tmp/unix-socket/*");
 
