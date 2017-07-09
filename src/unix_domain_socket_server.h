@@ -30,9 +30,10 @@ private:
     void serve();
     void closeSocket();
     void handle(int);
-    void notifyServer(std::string);
     void sendSocketName(int, SocketAck&);
     bool getRequest(int, SocketAck&);
+    void notifyCreate(std::string);
+    bool notifyDestroy(unsigned int);
     int server_;
     unsigned int counter_;
     std::string socketName_;

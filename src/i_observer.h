@@ -9,6 +9,7 @@ class IObserver
 public:
     virtual ~IObserver();
     virtual void create(std::string);
+    virtual bool destroy(unsigned int);
 };
 
 #endif

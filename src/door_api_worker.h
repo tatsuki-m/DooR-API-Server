@@ -16,14 +16,13 @@ class DoorApiWorker
 public:
     DoorApiWorker(unsigned int, std::string);
     ~DoorApiWorker();
+    unsigned int id_;
+    std::string socketName_;
+
 private:
     void run(std::string);
-    std::string getAppShmKey();
-
-    unsigned int id_;
-    unsigned int instanceNum_;
-    std::string socketName_;
-    bool abort_;
+    unsigned int instanceNum_ = 0;
+    WorkerUnixDomainSocketServer socket_;
     std::thread th_;
     //std::mutex mtx_;
     //std::condition_variable cv_;

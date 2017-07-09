@@ -2,11 +2,11 @@
 
 std::string BASE_SHM_KEY = "ShmKey";
 
-WorkerUnixDomainSocketServer::WorkerUnixDomainSocketServer(std::string socketName, unsigned int workerID) {
+WorkerUnixDomainSocketServer::WorkerUnixDomainSocketServer(std::string socketName, unsigned int workerId) {
     std::cout << "WorkerUnixDomainSocketServer: " << std::this_thread::get_id() << std::endl;
-    socketName_ = socketName;
     std::cout << "WorkerUnixDomainSocketServer SocketName: " << socketName_ << std::endl;
-    workerID_ = workerID;
+    socketName_ = socketName;
+    workerId_ = workerId;
     counter_ = 0;
     unlink(socketName_.c_str());
 }
@@ -66,9 +66,10 @@ WorkerUnixDomainSocketServer::serve() {
     struct sockaddr_in client_addr;
     socklen_t clientlen = sizeof(client_addr);
 
-    while (1) {
-        std::cout << "socket running" << std::endl;
+    while (true) {
+        std::cout << "WorkerUnixDomainSocketServer running" << std::endl;
         try {
+            std::cout << "accepting...." << std::endl;
             if ((client = accept(server_, (struct sockaddr *)&client_addr, &clientlen)) > 0) {
                 handle(client);
             } else {
@@ -112,7 +113,7 @@ void
 WorkerUnixDomainSocketServer::sendDoorShmKey(int client, SocketAck &ack) {
     std::cout << "WorkerUnixDomainSocketServer::sendSocketName: " << std::endl;
     int cc;
-    std::string doorShmKey = KeyGenerator::createDoorShmKey(BASE_SHM_KEY, workerID_, counter_);
+    std::string doorShmKey = KeyGenerator::createDoorShmKey(BASE_SHM_KEY, workerId_, counter_);
     strcpy(ack.data, doorShmKey.c_str());
 
     try {
@@ -129,8 +130,15 @@ WorkerUnixDomainSocketServer::sendDoorShmKey(int client, SocketAck &ack) {
 }
 
 void
+WorkerUnixDomainSocketServer::sendDestroy() {
+    std::cout << "WorkerUnixDomainSocketServer::sendDestroy()" << std::endl;
+    closeSocket();
+}
+
+void
 WorkerUnixDomainSocketServer::closeSocket() {
     std::cout << "WorkerUnixDomainSocketServer::closeSocket()" << std::endl;
+    close(server_);
     unlink(socketName_.c_str());
 }
 
