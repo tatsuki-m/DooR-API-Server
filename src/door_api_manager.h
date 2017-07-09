@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
 #include <stdio.h>
 #include <thread>
 #include <algorithm>
@@ -19,9 +20,12 @@ public:
     void create(std::string);
     bool destroy(unsigned int);
 
+    // for using DoorApiWoker in map
+    bool operator()(const DoorApiWorker &lWorker, const DoorApiWorker &rWorker) { return lWorker.id_ < rWorker.id_; }
 private:
+    //std::vector<DoorApiWorker*> doorApiWorkers;
+    std::map<unsigned int, DoorApiWorker*> workerMap;
     unsigned int workerId_;
-    std::vector<DoorApiWorker*> doorApiWorkers;
 };
 
 #endif

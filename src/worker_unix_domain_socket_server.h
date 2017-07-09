@@ -25,16 +25,17 @@ public:
     WorkerUnixDomainSocketServer(std::string, unsigned int);
     ~WorkerUnixDomainSocketServer();
     void run();
+    void sendDestroy();
 
 private:
     void create();
-    void closeSocket();
     void serve();
     void handle(int);
     void sendDoorShmKey(int, SocketAck&);
     bool getRequest(int, SocketAck&);
+    void closeSocket();
     int server_;
-    unsigned int workerID_;
+    unsigned int workerId_;
     unsigned int counter_;
     std::string socketName_;
 };

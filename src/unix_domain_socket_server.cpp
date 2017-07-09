@@ -3,6 +3,7 @@
 UnixDomainSocketServer::UnixDomainSocketServer(std::string socketName) {
     socketName_ = socketName;
     counter_ = 0;
+    unlink(socketName_.c_str());
 }
 
 UnixDomainSocketServer::~UnixDomainSocketServer() {
@@ -114,10 +115,11 @@ UnixDomainSocketServer::sendSocketName(int client, SocketAck &ack) {
 
     try {
         if ((cc = send(client, &ack, sizeof(ack), 0)) < 0) {
-            std::cerr << "UnisDomainSocketServer::sendSocketName";
+            std::cerr << "UnixDomainSocketServer::sendSocketName";
             throw;
         } else {
-            notifyCreate(socketName);
+            //notifyCreate(socketName);
+            notifyDestroy(1);
         }
     } catch(...) {
         closeSocket();
@@ -127,19 +129,21 @@ UnixDomainSocketServer::sendSocketName(int client, SocketAck &ack) {
 
 void
 UnixDomainSocketServer::notifyCreate(std::string socketName) {
-    std::cout << "UnisDomainSocketServer::notifyCreate()" << std::endl;
+    std::cout << "UnixDomainSocketServer::notifyCreate()" << std::endl;
     ISubject::notifyCreate(socketName);
 }
 
 bool
 UnixDomainSocketServer::notifyDestroy(unsigned int workerId) {
-    std::cout << "UnisDomainSocketServer::notifyDestroy()" << std::endl;
+    std::cout << "UnixDomainSocketServer::notifyDestroy()" << std::endl;
     ISubject::notifyDestroy(workerId);
 }
 
 void
 UnixDomainSocketServer::closeSocket() {
-    std::cout << "UnisDomainSocketServer::closeSocket()" << std::endl;
+    std::cout << "UnixDomainSocketServer::closeSocket()" << std::endl;
+    std::cerr << "Going to sleep.." << std::endl;
     unlink(socketName_.c_str());
+    exit(2);
 }
 
