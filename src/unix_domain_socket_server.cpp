@@ -126,8 +126,8 @@ UnixDomainSocketServer::sendSocketName(int client, SocketAck &ack) {
             std::cerr << "UnixDomainSocketServer::sendSocketName";
             throw;
         } else {
-            //notifyCreate(socketName);
-            notifyDestroy(1);
+            notifyCreate(socketName);
+            //notifyDestroy(1);
         }
     } catch(...) {
         closeSocket();
