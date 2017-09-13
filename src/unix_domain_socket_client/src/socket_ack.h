@@ -4,6 +4,7 @@
 enum SocketType {
     ASK_SOCKET = 0,
     ASK_SHM= 1,
+    STOP_SOCKET_SERVER = 99,
 };
 
 struct SocketAck {
