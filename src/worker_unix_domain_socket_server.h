@@ -9,6 +9,7 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <fcntl.h>
 #include <sys/un.h>
 #include <unistd.h>
 #include <string>
@@ -24,18 +25,21 @@ public:
     WorkerUnixDomainSocketServer(std::string, unsigned int);
     ~WorkerUnixDomainSocketServer();
     void run();
-    void sendDestroy();
 
 private:
     void create();
     void serve();
     void handle(int);
-    void sendDoorShmKey(int, SocketAck&);
+    void sendAck(int, SocketAck&);
+    void writeShmKey(SocketAck&);
     bool getRequest(int, SocketAck&);
     void closeSocket();
-    int server_;
+    void stopServer();
+
+    int sockfd_;
     unsigned int workerId_;
     unsigned int counter_;
+    bool stopLoopFlag;
     std::string socketName_;
 };
 
