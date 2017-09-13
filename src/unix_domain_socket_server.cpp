@@ -7,13 +7,21 @@ UnixDomainSocketServer::UnixDomainSocketServer(std::string socketName) {
 }
 
 UnixDomainSocketServer::~UnixDomainSocketServer() {
-    closeSocket();
 }
 
 void
 UnixDomainSocketServer::run() {
     create();
     serve();
+    closeSocket();
+}
+
+void
+UnixDomainSocketServer::closeSocket() {
+    std::cout << "UnixDomainSocketServer::closeSocket()" << std::endl;
+    std::cerr << "Going to sleep.." << std::endl;
+    unlink(socketName_.c_str());
+    exit(2);
 }
 
 void
@@ -137,13 +145,5 @@ bool
 UnixDomainSocketServer::notifyDestroy(unsigned int workerId) {
     std::cout << "UnixDomainSocketServer::notifyDestroy()" << std::endl;
     ISubject::notifyDestroy(workerId);
-}
-
-void
-UnixDomainSocketServer::closeSocket() {
-    std::cout << "UnixDomainSocketServer::closeSocket()" << std::endl;
-    std::cerr << "Going to sleep.." << std::endl;
-    unlink(socketName_.c_str());
-    exit(2);
 }
 

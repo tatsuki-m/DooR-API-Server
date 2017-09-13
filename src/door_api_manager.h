@@ -11,6 +11,8 @@
 
 #include "i_observer.h"
 #include "door_api_worker.h"
+#include "door_unix_domain_socket_client/socket_ack.h"
+#include "door_unix_domain_socket_client/unix_domain_socket_client.h"
 
 class DoorApiManager : public IObserver
 {

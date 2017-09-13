@@ -12,7 +12,7 @@ UnixDomainSocketClient::UnixDomainSocketClient(std::string socketName, SocketTyp
 }
 
 UnixDomainSocketClient::~UnixDomainSocketClient() {
-    close(server_);
+    std::cout << "UnixDomainSocketClient::~UnixDomainSocketClient;" << std::endl;
 }
 
 void
@@ -25,6 +25,7 @@ UnixDomainSocketClient::run() {
 
 void
 UnixDomainSocketClient::closeSocket() {
+    std::cout << "UnixDomainSocketClient::closeSocket" << std::endl;
     try {
         if(close(server_) == -1) {
             std::cerr << "UnixDomainSocketClient::closeSocket" << std::endl;
@@ -34,6 +35,7 @@ UnixDomainSocketClient::closeSocket() {
         unlink(socketName_.c_str());
         close(server_);
     }
+    close(server_);
 }
 
 void
@@ -67,6 +69,7 @@ UnixDomainSocketClient::handle() {
         is_sent = sendAck();
         if (!is_sent) throw;
         is_success = getResponse();
+        std::cout << "get request: " << is_success << std::endl;
         if (!is_success) throw;
     } catch(...) {
         unlink(socketName_.c_str());
@@ -76,7 +79,7 @@ UnixDomainSocketClient::handle() {
 
 bool
 UnixDomainSocketClient::sendAck() {
-    std::cout << "UnixDomainSocketLient::sendAck()" << std::endl;
+    std::cout << "UnixDomainSocketClient::sendAck()" << std::endl;
     try {
         int ss;
         if ((ss = send(server_, &ack_, sizeof(ack_), 0)) < 0) {
@@ -86,6 +89,7 @@ UnixDomainSocketClient::sendAck() {
             return true;
         }
     } catch(...) {
+        std::cout << "error UnixDomainSocketClient::sendAck()" << std::endl;
         unlink(socketName_.c_str());
         close(server_);
         return false;
@@ -94,6 +98,7 @@ UnixDomainSocketClient::sendAck() {
 
 bool
 UnixDomainSocketClient::getResponse() {
+    std::cout << "UnixDomainSocketClient::getResponse()" << std::endl;
     try {
         int gs;
 
@@ -106,6 +111,7 @@ UnixDomainSocketClient::getResponse() {
             return true;
         }
     } catch(...) {
+        std::cout << "error UnixDomainSocketClient::getResponse()" << std::endl;
         unlink(socketName_.c_str());
         close(server_);
         return false;
@@ -120,6 +126,6 @@ UnixDomainSocketClient::getRecievedData() {
 
 bool
 UnixDomainSocketClient::hasResponse() {
-    return true;/*ack_.res*/;
+    return true;
 }
 
