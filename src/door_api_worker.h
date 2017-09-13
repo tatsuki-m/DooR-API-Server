@@ -11,18 +11,21 @@
 #include "key_generator.h"
 #include "worker_unix_domain_socket_server.h"
 
+#include "door_unix_domain_socket_client/socket_ack.h"
+#include "door_unix_domain_socket_client/unix_domain_socket_client.h"
+
 class DoorApiWorker
 {
 public:
     DoorApiWorker(unsigned int, std::string);
     ~DoorApiWorker();
+    void stopWorkerSocketServer();
+
     unsigned int id_;
     std::string socketName_;
-
 private:
     void run(std::string);
     unsigned int instanceNum_ = 0;
-    WorkerUnixDomainSocketServer socket_;
     std::thread th_;
     //std::mutex mtx_;
     //std::condition_variable cv_;

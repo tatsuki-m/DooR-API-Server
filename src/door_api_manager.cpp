@@ -24,35 +24,30 @@ DoorApiManager::create(std::string socketName) {
 
 bool
 DoorApiManager::destroy(unsigned int workerId) {
-    std::cout << "DoorApiManger::destroy: destroy" << std::endl;
-    std::cout << "DoorApiManger::create: generate worker" << std::endl;
+    std::cout << "DoorApiManger::destroy: " << std::endl;
 
     // =============sample code
     std::string socketName = "/tmp/hoge";
     workerId_++;
+    std::cout << "Number: " << workerId_ << std::endl;
     DoorApiWorker* worker = new DoorApiWorker(workerId_, socketName);
-    std::cout << "worker id: " << worker->id_ << std::endl;
-    std::cout << "worker" << worker << std::endl;
-    //doorApiWorkers.push_back(worker);
     workerMap.insert(std::make_pair(workerId_, worker));
-    sleep(1);
     // ============
     std::cout << "size: " << workerMap.size() << std::endl;
 
     try {
-        // errorはserver側でかえすので、例外をはくatは使用しない方向で行く
+        sleep(1);
+        //DoorApiWorker *worker2 = workerMap.find(workerId);
+        // atにすると二回目にエラーが生じる
         DoorApiWorker *worker2 = workerMap.at(workerId);
-        std::cout << worker2->id_ << std::endl;
+        worker2->stopWorkerSocketServer();
+        std::cout << "Number2: " << workerId_ << std::endl;
         delete worker2;
-        //workerMap.erase(workerId);
+        workerMap.erase(workerId);
+        std::cout << "size: " << workerMap.size() << std::endl;
     }  catch (const std::out_of_range& oor) {
         std::cerr << "Out of Range error: " << oor.what() << std::endl;
         exit(0);
     }
-    //DoorApiWorker *worker2 = workerMap.at(workerId);
-    //delete worker2;
-    //std::cout << "worker2: " << worker2 << std::endl;
-    //std::cout << "delete worker" << std::endl;
-    //workerMap.erase(workerId);
 }
 
