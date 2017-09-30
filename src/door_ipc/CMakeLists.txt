@@ -29,7 +29,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR_IN_INTERFACE ON)
 
 # include file
 file(GLOB Srcs "./src/*.cpp")
-file(GLOB Srcs "./src/*.c")
 file(GLOB PUBLIC_HDRS "./src/*.h")
 
 # specify header file place
