@@ -19,7 +19,7 @@ public:
     ~MmapRing();
     void masterInit();
     void slaveInit();
-    bool push(std::string);
+    bool push(char *, int);
     bool pop();
 private:
     void initFile();

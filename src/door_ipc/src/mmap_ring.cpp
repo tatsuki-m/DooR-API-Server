@@ -24,7 +24,6 @@ void
 MmapRing::slaveInit()
 {
     initMmap();
-    initMmap();
     initBuffer();
 }
 
@@ -117,15 +116,16 @@ MmapRing::initBuffer()
 // 0x1: master-stop waiting
 ///////////////////////////////////////////////////////////////
 bool
-MmapRing::push(std::string sharedData)
+MmapRing::push(char * src, int length)
 {
-    const char* c_sharedData = sharedData.c_str();
+    //const char* c_sharedData = sharedData.c_str();
     std::cout << "Circular Buffer initialized" << std::endl;
     bool cb_push_passed = true;
     int whileLoop =0;
-    std::string testData = "/001/002/003/004/005/006/007/008/009/010/011/012/013/014/015";
     cb_buffer_struct push_data;
-    int divided_num = (int)ceil(testData.size()/sizeof(push_data.buffer));
+    int devided_num = (int)ceil(length/sizeof(push_data.buffer)); /* a number which devides the src data for distributing data to each core */
+    //std::string testData = "/001/002/003/004/005/006/007/008/009/010/011/012/013/014/015";
+    //int divided_num = (int)ceil(testData.size()/sizeof(push_data.buffer));
 
     // send control message stating the mmaps are initialized
     p_control_[0] = 0x0;
@@ -133,14 +133,15 @@ MmapRing::push(std::string sharedData)
         continue;
     }
 
-    // 
     while( p_control_[0] == 0x1 && whileLoop < loop_count ) {
         int i;
         for (i=0; i < no_of_buffers; i++) {
-            int start_num = ((whileLoop+i)%divided_num)*sizeof(push_data.buffer);
-            std::string data =testData.substr(start_num, 4);
-            std::cout << "data: " << data << std::endl;
-            strcpy( push_data.buffer, data.c_str());
+            //int start_num = ((whileLoop+i)%divided_num)*sizeof(push_data.buffer);
+            //std::string data =testData.substr(start_num, 4);
+            //std::cout << "data: " << data << std::endl;
+            int start_p = ((whileLoop+i)%devided_num)*sizeof(push_data.buffer);
+            strcpy( push_data.buffer, src + start_p);
+            std::cout << "data: " << push_data.buffer << std::endl;
             cb_push_passed  = (CB_push(cb_master_[i], push_data) == 1) ? true : false;
         }
 

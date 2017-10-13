@@ -39,7 +39,13 @@ main() {
 
     MmapRing ring_buffer = MmapRing(dataFileName, controlFileName);
     ring_buffer.masterInit();
-    ring_buffer.push("hoge\nfuga\nabcd\nmiura\n");
+    char testData[64] = "aaa\0bbb\0ccc\0ddd\0eee\0ggg\0hhh\0iii\0kkk\0lll\0mmm\0nnn\0ooo\0qqq\0rrr";
+    int length = sizeof(testData);
+    //char * p = &(testData[0]);
+    //std::cout << &p << std::endl;
+    //std::cout << testData[0] << std::endl;
+    //std::cout << &(testData[0]) << std::endl;
+    ring_buffer.push((char *)testData, 64);
 
     // initialize socket & server instance
     /*
