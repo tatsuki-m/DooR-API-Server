@@ -11,6 +11,7 @@
 #include "door_ipc/shared_packet_information.h"
 #include "door_ipc/sync_semaphore.h"
 #include "door_ipc/dpi.h"
+#include "door_ipc/mmap_ring.h"
 #include "door_api/door_api.h"
 
 void
@@ -33,14 +34,30 @@ signalHandler(int sigNum) {
 int
 main() {
     signal(SIGINT, signalHandler);
+    std::string dataFileName = "/tmp/SharedMem";
+    std::string controlFileName = "/tmp/SharedStatMem";
 
-    std::string socketName = "/tmp/unix-socket/init-socket";
+    MmapRing ring_buffer = MmapRing(dataFileName, controlFileName);
+    ring_buffer.masterInit();
+    char testData[64] = "aaa\0bbb\0ccc\0ddd\0eee\0ggg\0hhh\0iii\0kkk\0lll\0mmm\0nnn\0ooo\0qqq\0rrr";
+    int length = sizeof(testData);
+    //char * p = &(testData[0]);
+    //std::cout << &p << std::endl;
+    //std::cout << testData[0] << std::endl;
+    //std::cout << &(testData[0]) << std::endl;
+    ring_buffer.push((char *)testData, 64);
+
     // initialize socket & server instance
+    /*
+    std::string socketName = "/tmp/unix-socket/init-socket";
     UnixDomainSocketServer socket = UnixDomainSocketServer(socketName);
     DoorApiManager doorApiManager = DoorApiManager();
     socket.subscribe(&doorApiManager);
     // start server
     socket.run();
+    */
+
+
 
 /*
     std::string shmKey = "hoge";
