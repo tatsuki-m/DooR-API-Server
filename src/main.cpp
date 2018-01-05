@@ -34,6 +34,7 @@ signalHandler(int sigNum) {
 int
 main() {
     signal(SIGINT, signalHandler);
+    /*
     std::string dataFileName = "/tmp/SharedMem";
     std::string controlFileName = "/tmp/SharedStatMem";
 
@@ -46,16 +47,15 @@ main() {
     //std::cout << testData[0] << std::endl;
     //std::cout << &(testData[0]) << std::endl;
     ring_buffer.push((char *)testData, 64);
+    */
 
     // initialize socket & server instance
-    /*
     std::string socketName = "/tmp/unix-socket/init-socket";
     UnixDomainSocketServer socket = UnixDomainSocketServer(socketName);
     DoorApiManager doorApiManager = DoorApiManager();
     socket.subscribe(&doorApiManager);
     // start server
     socket.run();
-    */
 
 
 

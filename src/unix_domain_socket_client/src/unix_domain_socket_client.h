@@ -1,7 +1,7 @@
 #ifndef UNIX_DOMAIN_SOCKET_CLIENT_H_
 #define UNIX_DOMAIN_SOCKET_CLIENT_H_
 
-#pragma once
+//#pragma once
 
 #include <errno.h>
 #include <netdb.h>

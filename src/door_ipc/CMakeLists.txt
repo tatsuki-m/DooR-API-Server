@@ -10,7 +10,7 @@ cmake_policy(SET CMP0022 NEW)
 project(${PROJECT_NAME})
 
 # release build option 
-set(CMAKE_CXX_FLAGS_RELEASE "-Wall")
+set(CMAKE_CXX_FLAGS_RELEASE "-Wall -pthread -lrt")
 
 # debug build option
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
